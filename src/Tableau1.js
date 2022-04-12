@@ -33,7 +33,7 @@ class Tableau1 extends Phaser.Scene {
 
         this.player = this.physics.add.sprite(100, 300, 'player');
         //Taille de la hitbox du Player
-        this.player.body.setSize(this.player.width-20, this.player.height-20).setOffset(10, 20);
+        this.player.body.setSize(this.player.width-40, this.player.height-30).setOffset(20, 30);
         //this.player.setBounce(0.1);
         this.player.setCollideWorldBounds(false);
         //this.physics.add.collider(this.player, platforms);
@@ -83,7 +83,7 @@ class Tableau1 extends Phaser.Scene {
         map.getObjectLayer('Ladder').objects.forEach((ladder) => {
             // Add new spikes to our sprite group
             const ladderSprite = this.ladder.create(ladder.x,ladder.y + 100 - ladder.height, 'ladder').setOrigin(0);
-            ladderSprite.body.setSize(ladder.width-50, ladder.height).setOffset(50, 0);
+            ladderSprite.body.setSize(ladder.width-50, ladder.height).setOffset(0, 0);
         });
 
         //ENNEMIS
@@ -150,19 +150,19 @@ class Tableau1 extends Phaser.Scene {
             {
                 case Phaser.Input.Keyboard.KeyCodes.D:
                     me.rightLad = true;
-                    me.player.setVelocityX(300);
+                    me.player.setVelocityX(160);
                     if (me.player.body.onFloor()) {
                         me.player.play('walk', true);
                     }
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.Q:
                     me.leftLad = true;
-                    me.player.setVelocityX(-300);
+                    me.player.setVelocityX(-160);
                     if (me.player.body.onFloor()) {
                     me.player.play('walk', true);
                     }
                     break;
-                case Phaser.Input.Keyboard.KeyCodes.Z:
+                case Phaser.Input.Keyboard.KeyCodes.SPACE:
                     me.upLad = true;
                     if (me.player.body.onFloor()) {
                         me.player.setVelocityY(-800);
@@ -191,7 +191,7 @@ class Tableau1 extends Phaser.Scene {
                         me.player.play('idle', true);
                     }
                     break;
-                case Phaser.Input.Keyboard.KeyCodes.Z:
+                case Phaser.Input.Keyboard.KeyCodes.SPACE:
                     me.upLad = false;
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.S:
@@ -213,25 +213,26 @@ class Tableau1 extends Phaser.Scene {
 
 
         this.camBox.y = this.player.y;
+        this.camBox.x = this.player.x+200;
 
         /**CONDITIONS D'ANIMATIONS**/
         //Si perso bouge à droite son sprite est vers la droite
         if (this.player.body.velocity.x > 0)
         {
-            this.camBox.x += 6;
+            //this.camBox.x += 6;
             this.player.setFlipX(false);
         }
 
         // Dans le cas contraire il est vers la gauche
         else if (this.player.body.velocity.x < 0)
         {
-            this.camBox.x -= 6;
+            //this.camBox.x -= 6;
             this.player.setFlipX(true);
         }
         //S'il ne bouge pas et qu'il est au sol
         else if (this.player.body.velocity.x === 0 && this.player.body.onFloor())
         {
-            this.camBox.x = this.player.x;
+            //this.camBox.x = this.player.x;
             this.player.play('idle', true);
         }
 
