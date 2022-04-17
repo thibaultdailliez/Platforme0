@@ -1,0 +1,2 @@
+this.ADDrectangle (rectangle invisible)
+this.add.rectangle(coorx,coory,width,height)

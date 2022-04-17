@@ -22,3 +22,17 @@ canvas{
     outline: 1px solid #333;
 }
 
+.box {
+    border: 5px solid darkblue;
+
+    display: flex;
+    display: inline-flex;
+
+}
+.size {
+    margin-left: 100px;
+    margin-right: 100px;
+
+    display: flex;
+
+}
