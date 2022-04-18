@@ -33,8 +33,6 @@ class Tableau1 extends Phaser.Scene {
 
 
 
-
-
         /**PRESETS**/
         //BG / Map / Player with anim
         const backgroundImage = this.add.image(0, 0,'background').setOrigin(0, 0);
@@ -54,11 +52,31 @@ class Tableau1 extends Phaser.Scene {
             const saveSprite = this.saves.create(save.x, save.y  - save.height, 'save').setOrigin(0);
         });
 
+        /*/ TEXT
+        this.dialogs = this.physics.add.group({
+            allowGravity: false,
+            immovable: true
+        });
+        map.getObjectLayer('dialog').objects.forEach((dialogs) => {
+            // On ajoute la boite de dialogue via un pnj
+            const dialogSprite = this.dialogs.create(200, 800 - dialogs.height, 'player').setOrigin(0);
+        });
+        this.mytxt = this.add.text(150,250,"",{font: "20px", fill:"#00000"}).setOrigin(0,0).setScrollFactor(0);;
+// on ajoute une collision a notre NPC qui nous empêche de passer, on peut faire de même avec un asset
+        this.physics.add.collider(this.player, this.dialogs, text,  null,this)
+//
+        this.lock=0
+
+        */
+
+
+
+
 
 
         // Player
 
-        this.player = this.physics.add.sprite(100, 300, 'player');
+        this.player = this.physics.add.sprite(100, 700, 'player');
         //Taille de la hitbox du Player
         this.player.body.setSize(this.player.width-40, this.player.height-30).setOffset(20, 30);
         //this.player.setBounce(0.1);
@@ -135,6 +153,7 @@ class Tableau1 extends Phaser.Scene {
         this.physics.add.collider(this.ai2, this.sol);
 
 
+
         this.projectiles = this.add.group();
 
 
@@ -191,6 +210,37 @@ class Tableau1 extends Phaser.Scene {
         /**CREER UN OVERLAP OU UN COLLIDER QUI ACTIVE UN BOOLEEN AU CONTACT D'UNE ECHELLE ET LE DESACTIVE AU CONTACT DES PLATEFORMES**/
 
     }
+    /*
+    text(player,dialog){
+        let me = this
+        if(this.lock===0){  // si lock ===O on lance le dialogue si dessus
+            me.mytxt.setText("[Robot]: Si je te dis abeille ?\nA- C'est beau \nB- C'est bon   \nC- Elle plane")
+            me.lock=1 // lock = 1 donc le dialogue ne lancera plus solo
+        }
+        // quand j'appuie sur A je réponds à la question et je peux passer
+        this.input.keyboard.on('keydown-A', function () {
+            me.mytxt.setText("[Robot]: Dépêche toi de passer ou je te marrave")
+            dialog.body.enable=false // Le collider de mon NPC disparait et me permet de passer
+
+        }, this);
+
+        // quand j'appuie sur B je réponds à la question et je ne peux  pas passer
+        this.input.keyboard.on('keydown-B', function () {
+            me.mytxt.setText("[Robot]: C'est ta gueule que je vais manger tu \nva voir ! Donc une abeille c'est ?\nA- C'est beau \nC- Elle plane")
+            dialog.body.enable=true // Le collider de mon NPC reste toujours actif et bloque le passage
+
+        }, this);
+
+        thisinput.keyboard.on('keydown-C', function () {
+            me.mytxt.setText("[Robot]: C'est toi qui plane l'ami,donc l'abeille \nest ?\nA- C'est beau \nB- C'est bon")
+            dialog.body.enable=true // Le collider de mon NPC reste toujours actif et bloque le passage
+
+        }, this);
+
+
+    }
+    */
+
     tir(){
 
         if (this.tireD === true){
