@@ -16,6 +16,19 @@ class Tableau1 extends Phaser.Scene {
         this.load.image('Arme1','assets/images/square.png');
         this.load.image('shield','assets/images/shield.png' );
         this.load.image('save', 'assets/images/Save.png');
+        this.load.audio('song_sword','assets/sounds/song_sword.MP3');
+        this.load.audio('Hit','assets/sounds/sword_hit.MP3');
+        // idel
+        this.load.atlas('player', 'assets/images/perso_idel.png','assets/images/.json');
+        this.load.image('AnimI1', 'assets/anim/AnimI1.png');
+        this.load.image('AnimI2', 'assets/anim/AnimI2.png');
+        this.load.image('AnimI3', 'assets/anim/AnimI3.png');
+        this.load.image('AnimI4', 'assets/anim/AnimI4.png');
+        this.load.image('AnimI5', 'assets/anim/AnimI5.png');
+        this.load.image('AnimI6', 'assets/anim/AnimI6.png');
+        this.load.image('AnimI7', 'assets/anim/AnimI7.png');
+        this.load.image('AnimI8', 'assets/anim/AnimI8.png');
+
     }
 
 
@@ -28,6 +41,12 @@ class Tableau1 extends Phaser.Scene {
         // save
         this.currentSaveX = 100;
         this.currentSaveY = 300;
+
+
+
+        // sounds
+        this.sword = this.sound.add('song_sword');
+        this.swordHit = this.sound.add('Hit');
 
 
 
@@ -84,6 +103,25 @@ class Tableau1 extends Phaser.Scene {
         this.player.body.setAllowGravity(true);
         //this.physics.add.collider(this.player, platforms);.0
 
+        //idel creat
+
+        this.anims.create({
+            key: 'idle',
+            frames: [
+                {key:'AnimI1'},
+                {key:'AnimI2'},
+                {key:'AnimI3'},
+                {key:'AnimI4'},
+                {key:'AnimI5'},
+                {key:'AnimI6'},
+                {key:'AnimI7'},
+                {key:'AnimI8'},
+            ],
+            frameRate: 6,
+            repeat: -1 // -1 correspond a l'infini
+        });
+
+
         // Création du bouclier
 
         this.shield = this.physics.add.sprite(200, 0,'shield').setOrigin(0, 0);
@@ -126,11 +164,7 @@ class Tableau1 extends Phaser.Scene {
             repeat: -1
         });
 
-        this.anims.create({
-            key: 'idle',
-            frames: [{ key: 'player', frame: 'robo_player_0' }],
-            frameRate: 10,
-        });
+
         this.anims.create({
             key: 'jump',
             frames: [{ key: 'player', frame: 'robo_player_1' }],
@@ -285,7 +319,7 @@ class Tableau1 extends Phaser.Scene {
         player.setVelocity(0, 0);
         player.setX(50);
         player.setY(300);
-        player.play('idle', true);
+        /*player.play('idle', true);*/
         let tw = this.tweens.add({
             targets: player,
             alpha: 1,
@@ -334,7 +368,7 @@ class Tableau1 extends Phaser.Scene {
                         }
                         if (me.doubleJump === 1 && !me.player.body.onFloor()) { //SI LA VARIABLE DOUBLESAUT EST A 1 ET LE JOUEUR NE TOUCHE PAS LE SOL
                             if(me.gauche === true){
-                                me.player.x = me.player.x -100;
+                                me.player.setVelocityX = me.player.x -100;
                             }
                             else{
                                 me.player.x = me.player.x +100;
@@ -359,6 +393,7 @@ class Tableau1 extends Phaser.Scene {
                     break;
 
                 case Phaser.Input.Keyboard.KeyCodes.F:
+                    me.sword.play();
                     if (me.gauche == true ){
                         me.shield.setVisible(true);
                         me.shield.body.setEnable(true);
@@ -377,30 +412,30 @@ class Tableau1 extends Phaser.Scene {
                     me.rightLad = false;
                     me.rightDown= false;
                     me.player.setVelocityX(0);
-                    if (me.player.body.onFloor()) {
+                    /*if (me.player.body.onFloor()) {
                         me.player.play('idle', true);
-                    }
+                    }*/
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.Q:
                     me.leftLad = false;
                     me.leftDown= false;
                     me.player.setVelocityX(0);
-                    if (me.player.body.onFloor()) {
-                        me.player.play('idle', true);
-                    }
-                    break;
-                case Phaser.Input.Keyboard.KeyCodes.SPACE:
-                    me.upLad = false;
-                    me.dejaAppuye = false;
-                    break;
-                case Phaser.Input.Keyboard.KeyCodes.S:
-                    me.downLad = false;
-                    me.player.y = me.player.y - 27;
-                    me.player.body.setSize(me.player.width-40, me.player.height-30).setOffset(20, 30);
                     /*if (me.player.body.onFloor()) {
-                        me.player.y = me.player.y - 27;
-                        me.player.body.setSize(me.player.width-40, me.player.height-30).setOffset(20, 30);
-                    }*/
+                       me.player.play('idle', true);
+                   }*/
+                   break;
+               case Phaser.Input.Keyboard.KeyCodes.SPACE:
+                   me.upLad = false;
+                   me.dejaAppuye = false;
+                   break;
+               case Phaser.Input.Keyboard.KeyCodes.S:
+                   me.downLad = false;
+                   me.player.y = me.player.y - 27;
+                   me.player.body.setSize(me.player.width-40, me.player.height-30).setOffset(20, 30);
+                   /*if (me.player.body.onFloor()) {
+                       me.player.y = me.player.y - 27;
+                       me.player.body.setSize(me.player.width-40, me.player.height-30).setOffset(20, 30);
+                   }*/
                     break;
 
                 case Phaser.Input.Keyboard.KeyCodes.F:
@@ -441,6 +476,8 @@ class Tableau1 extends Phaser.Scene {
         } */
 
 
+
+
         this.camBox.y = this.player.y;
         this.camBox.x = this.player.x+200;
 
@@ -477,7 +514,7 @@ class Tableau1 extends Phaser.Scene {
         else if (this.player.body.velocity.x === 0 && this.player.body.onFloor())
         {
             //this.camBox.x = this.player.x;
-            this.player.play('idle', true);
+            //this.player.play('idle', true);
         }
 
         /**CONDITIONS POUR GRIMPER**/

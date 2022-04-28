@@ -1,0 +1,109 @@
+{
+    "frames": [
+        {
+            "filename": "perso_idel_0",
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 316,
+                "h": 160
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "perso_idel_1",
+            "frame": {
+                "x": 160,
+                "y": 0,
+                "w": 316,
+                "h": 160
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "perso_idel_2",
+            "frame": {
+                "x": 320,
+                "y": 0,
+                "w": 316,
+                "h": 160
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "perso_idel_3",
+            "frame": {
+                "w": 480,
+                "h": 160
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "perso_idel_4",
+            "frame": {
+                "x": 640,
+                "y": 0,
+                "w": 316,
+                "h": 160
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "perso_idel_5",
+            "frame": {
+                "x": 800,
+                "y": 0,
+                "w": 316,
+                "h": 160
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "perso_idel_6",
+            "frame": {
+                "x": 960,
+                "y": 0,
+                "w": 316,
+                "h": 160
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "perso_idel_7",
+            "frame": {
+                "x": 1120,
+                "y": 0,
+                "w": 316,
+                "h": 160
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+
+
+
+    ]
+}

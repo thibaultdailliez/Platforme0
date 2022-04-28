@@ -22,6 +22,7 @@ class Balle  {
         this.scene.physics.add.collider(this.balle, this.scene.shield, function () {
             console.log('toucheShieldd');
             me.balle.setVelocityY = - me.balle.body.velocity.y;
+            me.scene.swordHit.play();
 
 
         })
