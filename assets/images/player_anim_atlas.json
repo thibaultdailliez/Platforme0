@@ -1,0 +1,190 @@
+{
+    "frames": [
+        {
+            "filename": "idel1",
+            "frame": {
+                "w": 160,
+                "h": 316,
+                "x": 0,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "idel2",
+            "frame": {
+                "w": 159,
+                "h": 317,
+                "x": 0,
+                "y": 316
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "idel3",
+            "frame": {
+                "w": 155,
+                "h": 317,
+                "x": 0,
+                "y": 633
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "idel4",
+            "frame": {
+                "w": 160,
+                "h": 316,
+                "x": 0,
+                "y": 950
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "idel5",
+            "frame": {
+                "w": 159,
+                "h": 315,
+                "x": 0,
+                "y": 1266
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "idel6",
+            "frame": {
+                "w": 159,
+                "h": 310,
+                "x": 0,
+                "y": 1581
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "idel7",
+            "frame": {
+                "w": 159,
+                "h": 313,
+                "x": 0,
+                "y": 1891
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "idel8",
+            "frame": {
+                "w": 159,
+                "h": 317,
+                "x": 0,
+                "y": 2204
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "run-1",
+            "frame": {
+                "w": 268,
+                "h": 316,
+                "x": 0,
+                "y": 2521
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "run-2",
+            "frame": {
+                "w": 268,
+                "h": 316,
+                "x": 0,
+                "y": 2837
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "run-3",
+            "frame": {
+                "w": 268,
+                "h": 316,
+                "x": 0,
+                "y": 3153
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "run-4",
+            "frame": {
+                "w": 268,
+                "h": 316,
+                "x": 0,
+                "y": 3469
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "run-5",
+            "frame": {
+                "w": 268,
+                "h": 316,
+                "x": 0,
+                "y": 3785
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "run-6",
+            "frame": {
+                "w": 268,
+                "h": 316,
+                "x": 0,
+                "y": 4101
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        }
+    ],
+    "meta": {
+        "description": "Atlas generado con Atlas Packer Gamma V2",
+        "web": "https://gammafp.github.io/atlas-packer-phaser/"
+    }
+}

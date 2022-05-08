@@ -7,7 +7,7 @@ class Tableau1 extends Phaser.Scene {
         this.load.image('ladder', 'assets/images/ladder.png');
         this.load.image('enemy', 'assets/images/enemy.png');
         // At last image must be loaded with its JSON
-        this.load.atlas('player', 'assets/images/kenney_player.png','assets/images/kenney_player_atlas.json');
+        //this.load.atlas('player', 'assets/images/kenney_player.png','assets/images/kenney_player_atlas.json');
         this.load.image('tiles', 'assets/tilesets/platformPack_tilesheet.png');
         // Load the export Tiled JSON
         this.load.tilemapTiledJSON('map', 'assets/tilemaps/levelTry.json');
@@ -19,7 +19,7 @@ class Tableau1 extends Phaser.Scene {
         this.load.audio('song_sword','assets/sounds/song_sword.MP3');
         this.load.audio('Hit','assets/sounds/sword_hit.MP3');
         // idel
-        this.load.atlas('player', 'assets/images/perso_idel.png','assets/images/.json');
+        this.load.atlas('player', 'assets/images/player_anim.png','assets/images/player_anim_atlas.json');
         this.load.image('AnimI1', 'assets/anim/AnimI1.png');
         this.load.image('AnimI2', 'assets/anim/AnimI2.png');
         this.load.image('AnimI3', 'assets/anim/AnimI3.png');
@@ -95,9 +95,10 @@ class Tableau1 extends Phaser.Scene {
 
         // Player
 
-        this.player = this.physics.add.sprite(100, 700, 'player');
+        this.player = this.physics.add.sprite(100, 600, 'player');
+        this.player.scale=0.6
         //Taille de la hitbox du Player
-        this.player.body.setSize(this.player.width-40, this.player.height-30).setOffset(20, 30);
+        this.player.body.setSize(this.player.width-65, this.player.height-20).setOffset(40, 18);
         //this.player.setBounce(0.1);
         this.player.setCollideWorldBounds(false);
         this.player.body.setAllowGravity(true);
@@ -105,21 +106,7 @@ class Tableau1 extends Phaser.Scene {
 
         //idel creat
 
-        this.anims.create({
-            key: 'idle',
-            frames: [
-                {key:'AnimI1'},
-                {key:'AnimI2'},
-                {key:'AnimI3'},
-                {key:'AnimI4'},
-                {key:'AnimI5'},
-                {key:'AnimI6'},
-                {key:'AnimI7'},
-                {key:'AnimI8'},
-            ],
-            frameRate: 6,
-            repeat: -1 // -1 correspond a l'infini
-        });
+
 
 
         // Création du bouclier
@@ -154,21 +141,37 @@ class Tableau1 extends Phaser.Scene {
         //ANIMATION
 
         this.anims.create({
-            key: 'walk',
+            key: 'idel',
             frames: this.anims.generateFrameNames('player', {
-                prefix: 'robo_player_',
-                start: 2,
-                end: 3,
+                prefix: 'idel',
+                start: 1,
+                end: 8,
             }),
-            frameRate: 10,
+            frameRate: 6,
             repeat: -1
         });
+
+        this.anims.create({
+            key: 'walk',
+            frames: this.anims.generateFrameNames('player', {
+                prefix: 'run-',
+                start: 1,
+                end: 6,
+            }),
+            frameRate: 10,
+            repeat: -1});
+
 
 
         this.anims.create({
             key: 'jump',
-            frames: [{ key: 'player', frame: 'robo_player_1' }],
+            frames: this.anims.generateFrameNames('player', {
+                prefix: 'jump',
+                start: 1,
+                end: 6,
+            }),
             frameRate: 10,
+            repeat: -1
         });
 
 
@@ -319,7 +322,7 @@ class Tableau1 extends Phaser.Scene {
         player.setVelocity(0, 0);
         player.setX(50);
         player.setY(300);
-        /*player.play('idle', true);*/
+        player.play('idel', true);
         let tw = this.tweens.add({
             targets: player,
             alpha: 1,
@@ -343,7 +346,7 @@ class Tableau1 extends Phaser.Scene {
                     me.rightDown=true;
                     me.player.setVelocityX(300);
                     if (me.player.body.onFloor()) {
-                        me.player.play('walk', true);
+                        me.player.play('walk', true );
                     }
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.Q:
@@ -352,13 +355,13 @@ class Tableau1 extends Phaser.Scene {
                     me.leftDown=true;
                     me.player.setVelocityX(-300);
                     if (me.player.body.onFloor()) {
-                    me.player.play('walk', true);
+                    me.player.play('walk', true );
                     }
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.SPACE:
                     me.upLad = true;
+                    me.player.play('jump', true);//FAIS RIEN
                     if (me.dejaAppuye) { //SI LA VARIABLE DEJAAPPUYE EST VRAI
-                        //FAIS RIEN
                     }
                     else { //SINON
                         me.dejaAppuye = true;//POUR LA PROCHAINE FOIS
@@ -412,21 +415,25 @@ class Tableau1 extends Phaser.Scene {
                     me.rightLad = false;
                     me.rightDown= false;
                     me.player.setVelocityX(0);
-                    /*if (me.player.body.onFloor()) {
-                        me.player.play('idle', true);
-                    }*/
+                    if (me.player.body.onFloor()) {
+                        me.player.play('idel');
+                    }
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.Q:
                     me.leftLad = false;
                     me.leftDown= false;
                     me.player.setVelocityX(0);
-                    /*if (me.player.body.onFloor()) {
-                       me.player.play('idle', true);
-                   }*/
+                    if (me.player.body.onFloor()) {
+                       me.player.play('idel');
+                   }
                    break;
                case Phaser.Input.Keyboard.KeyCodes.SPACE:
                    me.upLad = false;
                    me.dejaAppuye = false;
+                   me.player.play('idel', false);
+                   if (me.player.body.onFloor()) {
+                       me.player.play('idel');
+                   }
                    break;
                case Phaser.Input.Keyboard.KeyCodes.S:
                    me.downLad = false;
