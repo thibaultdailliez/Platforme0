@@ -32,6 +32,7 @@ class Tableau1 extends Phaser.Scene {
     }
 
 
+
     create() {
 
         let me=this;
@@ -42,11 +43,10 @@ class Tableau1 extends Phaser.Scene {
         this.currentSaveX = 100;
         this.currentSaveY = 300;
 
-
-
         // sounds
         this.sword = this.sound.add('song_sword');
         this.swordHit = this.sound.add('Hit');
+
 
 
 
@@ -59,8 +59,9 @@ class Tableau1 extends Phaser.Scene {
 
         const map = this.make.tilemap({ key: 'map' });
         const tileset = map.addTilesetImage('project_platformer', 'tiles');
-        const platforms = map.createStaticLayer('Platforms', tileset, 0, 100);
+        const platforms = map.createStaticLayer('Platforms', tileset, 0, 100).setOrigin(0,0);
         //platforms.setCollisionByExclusion(-1, true);
+        this.player = new Player(this);
 
         //Save
         this.saves = this.physics.add.group({
@@ -93,16 +94,9 @@ class Tableau1 extends Phaser.Scene {
 
 
 
-        // Player
 
-        this.player = this.physics.add.sprite(100, 600, 'player');
-        this.player.scale=0.6
-        //Taille de la hitbox du Player
-        this.player.body.setSize(this.player.width-65, this.player.height-20).setOffset(40, 18);
-        //this.player.setBounce(0.1);
-        this.player.setCollideWorldBounds(false);
-        this.player.body.setAllowGravity(true);
-        //this.physics.add.collider(this.player, platforms);.0
+
+
 
         //idel creat
 
@@ -122,57 +116,12 @@ class Tableau1 extends Phaser.Scene {
 
         // IA qui Tire
         this.ai2 = this.physics.add.sprite(1200, 215, 'grenouille').setOrigin(0, 0);
-        this.ai2.setDisplaySize(50,75);
+        this.ai2.setDisplaySize(50,100);
         this.ai2.body.setAllowGravity(true);
         this.ai2.setVisible(true);
 
         // Projectille
 
-
-
-
-
-        const tx = this.player.x
-        const ty = this.player.y
-
-
-
-
-        //ANIMATION
-
-        this.anims.create({
-            key: 'idel',
-            frames: this.anims.generateFrameNames('player', {
-                prefix: 'idel',
-                start: 1,
-                end: 8,
-            }),
-            frameRate: 6,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'walk',
-            frames: this.anims.generateFrameNames('player', {
-                prefix: 'run-',
-                start: 1,
-                end: 6,
-            }),
-            frameRate: 10,
-            repeat: -1});
-
-
-
-        this.anims.create({
-            key: 'jump',
-            frames: this.anims.generateFrameNames('player', {
-                prefix: 'jump',
-                start: 1,
-                end: 6,
-            }),
-            frameRate: 10,
-            repeat: -1
-        });
 
 
         //COLLISIONS
@@ -185,8 +134,10 @@ class Tableau1 extends Phaser.Scene {
             this.sol.add(solSprite);
         });
 
-        // collision sol
-        this.physics.add.collider(this.player, this.sol);
+
+
+
+
         this.physics.add.collider(this.ai2, this.sol);
 
 
@@ -218,10 +169,13 @@ class Tableau1 extends Phaser.Scene {
             const enemySprite = this.enemy.create(enemy.x, enemy.y +100 - enemy.height, 'enemy').setOrigin(0);
             enemySprite.body.setSize(enemy.width, enemy.height).setOffset(0, 0);
         });
-        this.physics.add.collider(this.player, this.enemy, this.playerHit, null, this);
 
 
 
+        //Collider player
+        this.physics.add.collider(this.player.player, this.sol);
+        this.physics.add.collider(this.player.player, this.enemy, this.playerHit, null, this);
+        this.physics.add.overlap(this.player.player,this.ladder, this.climb.bind(this), null, this);
 
 
 
@@ -230,21 +184,20 @@ class Tableau1 extends Phaser.Scene {
         /**COLLIDERS AND OVERLAPS FOR INTERACTIONS**/
 
         //this.physics.add.collider(this.player, this.ladder, this.playerHit, null, this);
-        this.physics.add.overlap(this.player,this.ladder, this.climb.bind(this), null, this);
+
 
 
         /**CAMERA POINTING AND VISUAL POLISH**/
 
-        this.camBox = this.physics.add.sprite(this.player.x, this.player.y).setSize(10,10);
-        this.camBox.body.setAllowGravity(false);
-        this.camBox.setImmovable(true);
 
-        //this.cameras.main.zoomTo();
-        this.cameras.main.startFollow(this.camBox, true, 0.05, 0.03);
-        //this.cameras.main.setRoundPixels(true);
+
+
+
 
         this.initKeyboard();
         /**CREER UN OVERLAP OU UN COLLIDER QUI ACTIVE UN BOOLEEN AU CONTACT D'UNE ECHELLE ET LE DESACTIVE AU CONTACT DES PLATEFORMES**/
+
+        this.cameras.main.startFollow(this.player.player, true, 0.05, 0.03, -200,150 );
 
     }
     /*
@@ -277,6 +230,19 @@ class Tableau1 extends Phaser.Scene {
 
     }
     */
+    playerHit(player, enemy) {
+        this.player.player.setVelocity(0, 0);
+        this.player.player.setX(50);
+        this.player.player.setY(300);
+        this.player.player.play('idel', true);
+        let tw = this.tweens.add({
+            targets: player,
+            alpha: 1,
+            duration: 100,
+            ease: 'Linear',
+            repeat: 5,
+        });
+    }
 
     tir(){
 
@@ -289,7 +255,7 @@ class Tableau1 extends Phaser.Scene {
     }
 
     IaGestion2(){
-        this.dist2 = Phaser.Math.Distance.BetweenPoints(this.player,this.ai2);
+        this.dist2 = Phaser.Math.Distance.BetweenPoints(this.player.player,this.ai2);
 
         if (this.dist2 <= 400 && this.aiDeath === false) {
             this.tireD = true
@@ -305,32 +271,19 @@ class Tableau1 extends Phaser.Scene {
 
 
     climb(player, ladder){
-        this.player.onLadder = true;
+        this.player.player.onLadder = true;
     }
 
     sauvegarde(player, saves){
         console.log("current", this.currentSaveX, this.currentSaveY)
-        this.currentSaveX = player.x
-        this.currentSaveY = player.y
+        this.currentSaveX = player.player.x
+        this.currentSaveY = player.player.y
         saves.body.enable = false;
-        this.currentKey = player.key
+        this.currentKey = player.player.key
     }
 
 
-    playerHit(player, enemy) {
-        this.respawnAi= true;
-        player.setVelocity(0, 0);
-        player.setX(50);
-        player.setY(300);
-        player.play('idel', true);
-        let tw = this.tweens.add({
-            targets: player,
-            alpha: 1,
-            duration: 100,
-            ease: 'Linear',
-            repeat: 5,
-        });
-    }
+
 
     initKeyboard()
      {
@@ -344,52 +297,54 @@ class Tableau1 extends Phaser.Scene {
                     me.gauche = false;
                     me.rightLad = true;
                     me.rightDown=true;
-                    me.player.setVelocityX(300);
-                    if (me.player.body.onFloor()) {
-                        me.player.play('walk', true );
+                    me.player.player.setVelocityX(300);
+                    if (me.player.player.body.onFloor()) {
+                        me.player.player.play('walk', true);
                     }
+
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.Q:
                     me.gauche = true;
                     me.leftLad = true;
                     me.leftDown=true;
-                    me.player.setVelocityX(-300);
-                    if (me.player.body.onFloor()) {
-                    me.player.play('walk', true );
+                    me.player.player.setVelocityX(-300);
+                    if (me.player.player.body.onFloor()) {
+                        me.player.player.play('walk', true);
                     }
+
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.SPACE:
                     me.upLad = true;
-                    me.player.play('jump', true);//FAIS RIEN
+                    //me.player.play('jump', true);//FAIS RIEN
                     if (me.dejaAppuye) { //SI LA VARIABLE DEJAAPPUYE EST VRAI
                     }
                     else { //SINON
                         me.dejaAppuye = true;//POUR LA PROCHAINE FOIS
-                        if (me.player.body.onFloor()){ // SI LE JOUEUR TOUCHE LE SOL
-                            me.player.setVelocityY(-800); //LE PERSONNAGE VA A UNE VITESSE DE 330 VERS LE HAUT
+                        if (me.player.player.body.onFloor()){ // SI LE JOUEUR TOUCHE LE SOL
+                            me.player.player.setVelocityY(-800); //LE PERSONNAGE VA A UNE VITESSE DE 330 VERS LE HAUT
                             me.doubleJump = 1; //LA VARIABLE DOUBLEJUMP A 1 POUR POUVOIR AVOIR LE DOUBLE SAUT
                         }
-                        if (me.doubleJump === 1 && !me.player.body.onFloor()) { //SI LA VARIABLE DOUBLESAUT EST A 1 ET LE JOUEUR NE TOUCHE PAS LE SOL
+                        if (me.doubleJump === 1 && !me.player.player.body.onFloor()) { //SI LA VARIABLE DOUBLESAUT EST A 1 ET LE JOUEUR NE TOUCHE PAS LE SOL
                             if(me.gauche === true){
-                                me.player.setVelocityX = me.player.x -100;
+                                me.player.player.x = me.player.player.x -100;
                             }
                             else{
-                                me.player.x = me.player.x +100;
+                                me.player.player.x = me.player.player.x +100;
                             }
-                            me.player.setVelocityY(-300); //LE PERSONNAGE VA A UNE VITESSE DE 330 VERS LE HAUT
+                            me.player.player.setVelocityY(-300); //LE PERSONNAGE VA A UNE VITESSE DE 330 VERS LE HAUT
                             me.doubleJump = 0; //LA VARIABLE DOUBLEJUMP A 0 POUR NE PLUS POUVOIR AVOIR LE DOUBLE SAUT
                         }
                     }
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.S:
                     if (me.leftDown){
-                        me.player.setVelocityX(-100);//LE PERSONNAGE VA A UNE VITESSE DE <A UNE VITESSE DE 260 A GAUCHE
+                        me.player.player.setVelocityX(-100);//LE PERSONNAGE VA A UNE VITESSE DE <A UNE VITESSE DE 260 A GAUCHE
                     }
                     else if (me.rightDown){
-                        me.player.setVelocityX(100);//LE PERSONNAGE VA A UNE VITESSE DE A UNE VITESSE DE 260 A DROITE
+                        me.player.player.setVelocityX(100);//LE PERSONNAGE VA A UNE VITESSE DE A UNE VITESSE DE 260 A DROITE
                     }
-                    if (me.player.body.onFloor()) {
-                        me.player.body.setSize(me.player.width-40, me.player.height-60).setOffset(20, 30);
+                    if (me.player.player.body.onFloor()) {
+                        me.player.player.body.setSize(me.player.width-40, me.player.height-60).setOffset(20, 30);
                     }
                     me.downLad = true;
 
@@ -414,31 +369,31 @@ class Tableau1 extends Phaser.Scene {
                 case Phaser.Input.Keyboard.KeyCodes.D:
                     me.rightLad = false;
                     me.rightDown= false;
-                    me.player.setVelocityX(0);
-                    if (me.player.body.onFloor()) {
-                        me.player.play('idel');
+                    me.player.player.setVelocityX(0);
+                    if (me.player.player.body.onFloor()) {
+                        me.player.player.play('idel');
                     }
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.Q:
                     me.leftLad = false;
                     me.leftDown= false;
-                    me.player.setVelocityX(0);
-                    if (me.player.body.onFloor()) {
-                       me.player.play('idel');
+                    me.player.player.setVelocityX(0);
+                    if (me.player.player.body.onFloor()) {
+                       me.player.player.play('idel');
                    }
                    break;
                case Phaser.Input.Keyboard.KeyCodes.SPACE:
                    me.upLad = false;
                    me.dejaAppuye = false;
-                   me.player.play('idel', false);
-                   if (me.player.body.onFloor()) {
-                       me.player.play('idel');
+                   me.player.player.play('idel', false);
+                   if (me.player.player.body.onFloor()) {
+                       me.player.player.play('idel');
                    }
                    break;
                case Phaser.Input.Keyboard.KeyCodes.S:
                    me.downLad = false;
-                   me.player.y = me.player.y - 27;
-                   me.player.body.setSize(me.player.width-40, me.player.height-30).setOffset(20, 30);
+                   me.player.player.y = me.player.player.y - 27;
+                   me.player.player.body.setSize(me.player.player.width-40, me.player.player.height-30).setOffset(20, 30);
                    /*if (me.player.body.onFloor()) {
                        me.player.y = me.player.y - 27;
                        me.player.body.setSize(me.player.width-40, me.player.height-30).setOffset(20, 30);
@@ -485,68 +440,67 @@ class Tableau1 extends Phaser.Scene {
 
 
 
-        this.camBox.y = this.player.y;
-        this.camBox.x = this.player.x+200;
+
 
 
         // on tp constament les shield au joueur
 
         if (this.gauche == true ){
             this.shield.setFlipX(true);
-            this.shield.x = this.player.x -55    ;
-            this.shield.y = this.player.y -40    ;
+            this.shield.x = this.player.player.x -55    ;
+            this.shield.y = this.player.player.y -40    ;
         }
 
         else {
             this.shield.setFlipX(false);
-            this.shield.x = this.player.x + 30 ;
-            this.shield.y = this.player.y -40  ;
+            this.shield.x = this.player.player.x + 30 ;
+            this.shield.y = this.player.player.y -40  ;
         }
 
         /**CONDITIONS D'ANIMATIONS**/
         //Si perso bouge à droite son sprite est vers la droite
-        if (this.player.body.velocity.x > 0)
+        if (this.player.player.body.velocity.x > 0)
         {
             //this.camBox.x += 6;
-            this.player.setFlipX(false);
+            this.player.player.setFlipX(false);
         }
 
         // Dans le cas contraire il est vers la gauche
-        else if (this.player.body.velocity.x < 0)
+        else if (this.player.player.body.velocity.x < 0)
         {
             //this.camBox.x -= 6;
-            this.player.setFlipX(true);
+            this.player.player.setFlipX(true);
         }
         //S'il ne bouge pas et qu'il est au sol
-        else if (this.player.body.velocity.x === 0 && this.player.body.onFloor())
+        else if (this.player.player.body.velocity.x === 0 && this.player.player.body.onFloor())
         {
             //this.camBox.x = this.player.x;
             //this.player.play('idle', true);
         }
 
         /**CONDITIONS POUR GRIMPER**/
-        if(this.player.onLadder)
+        if(this.player.player.onLadder)
         {
-            this.player.onLadder = false;
+            this.player.player.onLadder = false;
             if (this.upLad)
             {
-                this.player.setVelocityY(-400);
-                this.player.body.setAllowGravity(true);
+                this.player.player.setVelocityY(-400);
+                this.player.player.body.setAllowGravity(true);
             }
             else if (this.downLad)
             {
-                this.player.setVelocityY(400);
-                this.player.body.setAllowGravity(true);
+                this.player.player.setVelocityY(400);
+                this.player.player.body.setAllowGravity(true);
             }
             else {
-                this.player.setVelocityY(0);
-                this.player.body.setAllowGravity(false);
+                this.player.player.setVelocityY(0);
+                this.player.player.body.setAllowGravity(false);
 
             }
 
-            if (!this.player.onLadder){
+            if (!this.player.player.onLadder){
                 if (this.downLad || this.upLad || this.rightLad || this.leftLad){
-                    this.player.body.setAllowGravity(true);
+                    this.player.player.body.setAllowGravity(true);
                 }
             }
 

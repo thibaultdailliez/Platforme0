@@ -10,12 +10,12 @@ class Balle  {
         this.balle.body.setMaxVelocityY(700);
         this.balle.body.setAllowGravity(false)
 
-        this.scene.physics.moveToObject(this.balle, this.scene.player, 400);
-        this.scene.physics.add.overlap(this.balle, this.scene.player, function () {
+        this.scene.physics.moveToObject(this.balle, this.scene.player.player, 400);
+        this.scene.physics.add.overlap(this.balle, this.scene.player.player, function () {
             console.log('touchePerso');
             me.balle.destroy(true);
-            me.scene.player.x = me.scene.currentSaveX;
-            me.scene.player.y = me.scene.currentSaveY;
+            me.scene.player.player.x = me.scene.currentSaveX;
+            me.scene.player.player.y = me.scene.currentSaveY;
 
 
         })
