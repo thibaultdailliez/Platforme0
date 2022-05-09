@@ -16,8 +16,8 @@ class Tableau1 extends Phaser.Scene {
         this.load.image('Arme1','assets/images/square.png');
         this.load.image('shield','assets/images/shield.png' );
         this.load.image('save', 'assets/images/Save.png');
-        this.load.audio('song_sword','assets/sounds/song_sword.MP3');
-        this.load.audio('Hit','assets/sounds/sword_hit.MP3');
+        this.load.audio('song_sword','assets/sounds/song_sword.mp3');
+        this.load.audio('Hit','assets/sounds/sword_hit.mp3');
         // idel
         this.load.atlas('player', 'assets/images/player_anim.png','assets/images/player_anim_atlas.json');
         this.load.image('AnimI1', 'assets/anim/AnimI1.png');
