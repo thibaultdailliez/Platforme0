@@ -1,5 +1,5 @@
 class Player {
-    constructor(Tableau1){
+    constructor(Tableau1, Balle){
         let me = this
         this.scene= Tableau1
         this.player = this.scene.physics.add.sprite(100, 600, 'player');

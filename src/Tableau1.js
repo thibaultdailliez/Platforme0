@@ -36,9 +36,7 @@ class Tableau1 extends Phaser.Scene {
     create() {
 
         let me=this;
-        this.tireD = false;
         this.gauche = true;
-        this.aiDeath = false;
         // save
         this.currentSaveX = 100;
         this.currentSaveY = 300;
@@ -62,6 +60,7 @@ class Tableau1 extends Phaser.Scene {
         const platforms = map.createStaticLayer('Platforms', tileset, 0, 100).setOrigin(0,0);
         //platforms.setCollisionByExclusion(-1, true);
         this.player = new Player(this);
+
 
         //Save
         this.saves = this.physics.add.group({
@@ -106,7 +105,7 @@ class Tableau1 extends Phaser.Scene {
         // Création du bouclier
 
         this.shield = this.physics.add.sprite(200, 0,'shield').setOrigin(0, 0);
-        this.shield.setDisplaySize(25,60);
+        this.shield.setDisplaySize(10,100);
         this.shield.body.setAllowGravity(false);
         this.shield.setFlipX(true);
         this.shield.setVisible(false);
@@ -115,10 +114,9 @@ class Tableau1 extends Phaser.Scene {
 
 
         // IA qui Tire
-        this.ai2 = this.physics.add.sprite(1200, 215, 'grenouille').setOrigin(0, 0);
-        this.ai2.setDisplaySize(50,100);
-        this.ai2.body.setAllowGravity(true);
-        this.ai2.setVisible(true);
+
+
+
 
         // Projectille
 
@@ -138,7 +136,7 @@ class Tableau1 extends Phaser.Scene {
 
 
 
-        this.physics.add.collider(this.ai2, this.sol);
+
 
 
 
@@ -198,7 +196,12 @@ class Tableau1 extends Phaser.Scene {
         /**CREER UN OVERLAP OU UN COLLIDER QUI ACTIVE UN BOOLEEN AU CONTACT D'UNE ECHELLE ET LE DESACTIVE AU CONTACT DES PLATEFORMES**/
 
         this.cameras.main.startFollow(this.player.player, true, 0.05, 0.03, -200,150 );
+        this.ai = new Ai(this);
+        this.ai2 = new Ai(this);
+        this.ai2.ai.x = 500;
+        this.balle = new Balle(this);
 
+        this.ai.tir(this.ai.ai)
     }
     /*
     text(player,dialog){
@@ -244,30 +247,8 @@ class Tableau1 extends Phaser.Scene {
         });
     }
 
-    tir(){
-
-        if (this.tireD === true){
-            this.balle = new Balle(this);
-
-        }
 
 
-    }
-
-    IaGestion2(){
-        this.dist2 = Phaser.Math.Distance.BetweenPoints(this.player.player,this.ai2);
-
-        if (this.dist2 <= 400 && this.aiDeath === false) {
-            this.tireD = true
-            console.log("tire")
-
-        }
-        else{
-            this.tireD = false;
-
-        }
-
-    }
 
 
     climb(player, ladder){
@@ -423,7 +404,11 @@ class Tableau1 extends Phaser.Scene {
             tir.update();
         }
 
-        this.IaGestion2()
+        //this.ai.IaGestion2(this.ai.ai,this.ai.dist)
+
+
+        // this.ai.IaGestion2(this.ai2.ai,this.ai2.dist)
+        // this.ai.tir()
 
         /*
         if(this.respawnAi===true){
@@ -447,14 +432,14 @@ class Tableau1 extends Phaser.Scene {
 
         if (this.gauche == true ){
             this.shield.setFlipX(true);
-            this.shield.x = this.player.player.x -55    ;
-            this.shield.y = this.player.player.y -40    ;
+            this.shield.x = this.player.player.x -110    ;
+            this.shield.y = this.player.player.y -100    ;
         }
 
         else {
             this.shield.setFlipX(false);
-            this.shield.x = this.player.player.x + 30 ;
-            this.shield.y = this.player.player.y -40  ;
+            this.shield.x = this.player.player.x + 110 ;
+            this.shield.y = this.player.player.y -100  ;
         }
 
         /**CONDITIONS D'ANIMATIONS**/
