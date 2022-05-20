@@ -15,8 +15,8 @@ class Balle  {
         this.scene.physics.add.overlap(this.balle, this.scene.player.player, function () {
             console.log('touchePerso');
             me.balle.destroy(true);
-            me.scene.player.player.x = me.scene.currentSaveX;
-            me.scene.player.player.y = me.scene.currentSaveY;
+            me.scene.player.player.x = me.scene.savesX;
+            me.scene.player.player.y = me.scene.savesY;
 
 
         })

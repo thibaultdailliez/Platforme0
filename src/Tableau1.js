@@ -37,10 +37,7 @@ class Tableau1 extends Phaser.Scene {
 
         let me=this;
         this.gauche = true;
-        // save
-        this.currentSaveX = 100;
-        this.currentSaveY = 300;
-
+        this.touchP = false;
         // sounds
         this.sword = this.sound.add('song_sword');
         this.swordHit = this.sound.add('Hit');
@@ -60,6 +57,8 @@ class Tableau1 extends Phaser.Scene {
         const platforms = map.createStaticLayer('Platforms', tileset, 0, 100).setOrigin(0,0);
         //platforms.setCollisionByExclusion(-1, true);
         this.player = new Player(this);
+        this.savesX = this.player.player.x;
+        this.savesY = this.player.player.y;
 
 
         //Save
@@ -67,8 +66,9 @@ class Tableau1 extends Phaser.Scene {
             allowGravity: false,
             immovable: true
         });
+
         map.getObjectLayer('Save').objects.forEach((save) => {
-            const saveSprite = this.saves.create(save.x, save.y  - save.height, 'save').setOrigin(0);
+            const saveSprite = this.saves.create(save.x, save.y  - save.height + 100, 'save').setOrigin(0);
         });
 
         /*/ TEXT
@@ -127,9 +127,19 @@ class Tableau1 extends Phaser.Scene {
             allowGravity: false,
             immovable: true
         });
+
         map.getObjectLayer('Sol').objects.forEach((sol) => {
             const solSprite = this.physics.add.sprite(sol.x+(sol.width*0.5),sol.y + (sol.height*0.5) + 100).setSize(sol.width,sol.height);
             this.sol.add(solSprite);
+        });
+
+        this.PlatformCam = this.physics.add.group({
+            allowGravity: false,
+            immovable: true
+        });
+        map.getObjectLayer('Platform').objects.forEach((platformcam) => {
+            const PlaformCamSprite = this.physics.add.sprite(platformcam.x+(platformcam.width*0.5),platformcam.y + (platformcam.height*0.5) + 100).setSize(platformcam.width,platformcam.height);
+            this.PlatformCam.add(PlaformCamSprite);
         });
 
 
@@ -152,11 +162,7 @@ class Tableau1 extends Phaser.Scene {
             allowGravity: false,
             immovable: true
         });
-        map.getObjectLayer('Ladder').objects.forEach((ladder) => {
-            // Add new spikes to our sprite group
-            const ladderSprite = this.ladder.create(ladder.x,ladder.y + 100 - ladder.height, 'ladder').setOrigin(0);
-            ladderSprite.body.setSize(ladder.width-50, ladder.height).setOffset(0, 0);
-        });
+
 
         //ENNEMIS
         this.enemy = this.physics.add.group({
@@ -164,38 +170,22 @@ class Tableau1 extends Phaser.Scene {
             immovable: true
         });
         map.getObjectLayer('Enemy').objects.forEach((enemy) => {
-            const enemySprite = this.enemy.create(enemy.x, enemy.y +100 - enemy.height, 'enemy').setOrigin(0);
+            const enemySprite = this.enemy.create(enemy.x, enemy.y - enemy.height + 100).setOrigin(0);
             enemySprite.body.setSize(enemy.width, enemy.height).setOffset(0, 0);
         });
 
 
 
         //Collider player
-        this.physics.add.collider(this.player.player, this.sol);
+        this.physics.add.collider(this.player.player, this.sol, this.SolCamera, null, this);
+        this.physics.add.collider(this.player.player, this.PlatformCam, this.PlatformCamera, null, this);
         this.physics.add.collider(this.player.player, this.enemy, this.playerHit, null, this);
-        this.physics.add.overlap(this.player.player,this.ladder, this.climb.bind(this), null, this);
-
-
-
-
-
-        /**COLLIDERS AND OVERLAPS FOR INTERACTIONS**/
-
-        //this.physics.add.collider(this.player, this.ladder, this.playerHit, null, this);
-
-
-
-        /**CAMERA POINTING AND VISUAL POLISH**/
-
-
-
-
+        this.physics.add.overlap(this.player.player, this.saves, this.Save, null, this);
 
 
         this.initKeyboard();
-        /**CREER UN OVERLAP OU UN COLLIDER QUI ACTIVE UN BOOLEEN AU CONTACT D'UNE ECHELLE ET LE DESACTIVE AU CONTACT DES PLATEFORMES**/
 
-        this.cameras.main.startFollow(this.player.player, true, 0.05, 0.03, -200,150 );
+        this.cameras.main.startFollow(this.player.player, true, 0.1, 0.1, -350,150 );
         this.ai = new Ai(this);
         this.ai2 = new Ai(this);
         this.ai2.ai.x = 500;
@@ -235,8 +225,8 @@ class Tableau1 extends Phaser.Scene {
     */
     playerHit(player, enemy) {
         this.player.player.setVelocity(0, 0);
-        this.player.player.setX(50);
-        this.player.player.setY(300);
+        this.player.player.x = this.savesX;
+        this.player.player.y = this.savesY;
         this.player.player.play('idel', true);
         let tw = this.tweens.add({
             targets: player,
@@ -246,24 +236,30 @@ class Tableau1 extends Phaser.Scene {
             repeat: 5,
         });
     }
+    Save(player, save){
+        this.savesX = this.player.player.x;
+        this.savesY = this.player.player.y;
+        console.log("save", this.savesX, this.savesY);
+        save.visible = false;
+        save.body.enable = false;
 
-
-
-
-
-    climb(player, ladder){
-        this.player.player.onLadder = true;
     }
+    PlatformCamera(){
+        this.touchP = true;
 
-    sauvegarde(player, saves){
-        console.log("current", this.currentSaveX, this.currentSaveY)
-        this.currentSaveX = player.player.x
-        this.currentSaveY = player.player.y
-        saves.body.enable = false;
-        this.currentKey = player.player.key
     }
+   SolCamera(){
+       this.touchP = false;
+    }
+    SwitchCam(){
+        if(this.touchP == true){
+            this.cameras.main.startFollow(this.player.player, true, 0.01, 0.01, -350,-85 );
 
-
+        }
+        else {
+            this.cameras.main.startFollow(this.player.player, true, 0.1, 0.1, -350,150 );
+        }
+    }
 
 
     initKeyboard()
@@ -276,46 +272,16 @@ class Tableau1 extends Phaser.Scene {
             {
                 case Phaser.Input.Keyboard.KeyCodes.D:
                     me.gauche = false;
-                    me.rightLad = true;
-                    me.rightDown=true;
-                    me.player.player.setVelocityX(300);
-                    if (me.player.player.body.onFloor()) {
-                        me.player.player.play('walk', true);
-                    }
+                    me.player.Right();
 
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.Q:
                     me.gauche = true;
-                    me.leftLad = true;
-                    me.leftDown=true;
-                    me.player.player.setVelocityX(-300);
-                    if (me.player.player.body.onFloor()) {
-                        me.player.player.play('walk', true);
-                    }
-
+                    me.player.Left();
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.SPACE:
                     me.upLad = true;
-                    //me.player.play('jump', true);//FAIS RIEN
-                    if (me.dejaAppuye) { //SI LA VARIABLE DEJAAPPUYE EST VRAI
-                    }
-                    else { //SINON
-                        me.dejaAppuye = true;//POUR LA PROCHAINE FOIS
-                        if (me.player.player.body.onFloor()){ // SI LE JOUEUR TOUCHE LE SOL
-                            me.player.player.setVelocityY(-800); //LE PERSONNAGE VA A UNE VITESSE DE 330 VERS LE HAUT
-                            me.doubleJump = 1; //LA VARIABLE DOUBLEJUMP A 1 POUR POUVOIR AVOIR LE DOUBLE SAUT
-                        }
-                        if (me.doubleJump === 1 && !me.player.player.body.onFloor()) { //SI LA VARIABLE DOUBLESAUT EST A 1 ET LE JOUEUR NE TOUCHE PAS LE SOL
-                            if(me.gauche === true){
-                                me.player.player.x = me.player.player.x -100;
-                            }
-                            else{
-                                me.player.player.x = me.player.player.x +100;
-                            }
-                            me.player.player.setVelocityY(-300); //LE PERSONNAGE VA A UNE VITESSE DE 330 VERS LE HAUT
-                            me.doubleJump = 0; //LA VARIABLE DOUBLEJUMP A 0 POUR NE PLUS POUVOIR AVOIR LE DOUBLE SAUT
-                        }
-                    }
+                    me.player.Jump();
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.S:
                     if (me.leftDown){
@@ -333,14 +299,15 @@ class Tableau1 extends Phaser.Scene {
 
                 case Phaser.Input.Keyboard.KeyCodes.F:
                     me.sword.play();
-                    if (me.gauche == true ){
-                        me.shield.setVisible(true);
-                        me.shield.body.setEnable(true);
-                    }
-                    else{
-                        me.shield.setVisible(true);
-                        me.shield.body.setEnable(true);
-                    }
+                    me.player.SwordRL();
+
+                    break;
+
+                case Phaser.Input.Keyboard.KeyCodes.Z:
+                    me.UpOn = true;
+                    me.sword.play();
+                    me.player.SwordUp();
+
                     break;
             }
         });
@@ -348,31 +315,21 @@ class Tableau1 extends Phaser.Scene {
         {
             switch (kevent.keyCode) {
                 case Phaser.Input.Keyboard.KeyCodes.D:
-                    me.rightLad = false;
-                    me.rightDown= false;
                     me.player.player.setVelocityX(0);
                     if (me.player.player.body.onFloor()) {
                         me.player.player.play('idel');
                     }
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.Q:
-                    me.leftLad = false;
-                    me.leftDown= false;
                     me.player.player.setVelocityX(0);
                     if (me.player.player.body.onFloor()) {
                        me.player.player.play('idel');
                    }
                    break;
                case Phaser.Input.Keyboard.KeyCodes.SPACE:
-                   me.upLad = false;
                    me.dejaAppuye = false;
-                   me.player.player.play('idel', false);
-                   if (me.player.player.body.onFloor()) {
-                       me.player.player.play('idel');
-                   }
                    break;
                case Phaser.Input.Keyboard.KeyCodes.S:
-                   me.downLad = false;
                    me.player.player.y = me.player.player.y - 27;
                    me.player.player.body.setSize(me.player.player.width-40, me.player.player.height-30).setOffset(20, 30);
                    /*if (me.player.body.onFloor()) {
@@ -382,7 +339,12 @@ class Tableau1 extends Phaser.Scene {
                     break;
 
                 case Phaser.Input.Keyboard.KeyCodes.F:
+                    me.shield.setVisible(false)
+                    me.shield.body.setEnable(false);
+                    break;
 
+                case Phaser.Input.Keyboard.KeyCodes.Z:
+                    me.UpOn = false;
                     me.shield.setVisible(false)
                     me.shield.body.setEnable(false);
                     break;
@@ -403,6 +365,10 @@ class Tableau1 extends Phaser.Scene {
             var tir = this.projectiles.getChildren()[i];
             tir.update();
         }
+
+
+
+
 
         //this.ai.IaGestion2(this.ai.ai,this.ai.dist)
 
@@ -442,55 +408,23 @@ class Tableau1 extends Phaser.Scene {
             this.shield.y = this.player.player.y -100  ;
         }
 
+        if (this.UpOn == true ){
+            this.shield.x = this.player.player.x    ;
+            this.shield.y = this.player.player.y -200  ;
+        }
+
+        else {
+
+        }
+
         /**CONDITIONS D'ANIMATIONS**/
-        //Si perso bouge à droite son sprite est vers la droite
-        if (this.player.player.body.velocity.x > 0)
+        if (this.player.player.body.velocity.x === 0 && this.player.player.body.onFloor())
         {
-            //this.camBox.x += 6;
-            this.player.player.setFlipX(false);
+
         }
 
-        // Dans le cas contraire il est vers la gauche
-        else if (this.player.player.body.velocity.x < 0)
-        {
-            //this.camBox.x -= 6;
-            this.player.player.setFlipX(true);
-        }
-        //S'il ne bouge pas et qu'il est au sol
-        else if (this.player.player.body.velocity.x === 0 && this.player.player.body.onFloor())
-        {
-            //this.camBox.x = this.player.x;
-            //this.player.play('idle', true);
-        }
-
-        /**CONDITIONS POUR GRIMPER**/
-        if(this.player.player.onLadder)
-        {
-            this.player.player.onLadder = false;
-            if (this.upLad)
-            {
-                this.player.player.setVelocityY(-400);
-                this.player.player.body.setAllowGravity(true);
-            }
-            else if (this.downLad)
-            {
-                this.player.player.setVelocityY(400);
-                this.player.player.body.setAllowGravity(true);
-            }
-            else {
-                this.player.player.setVelocityY(0);
-                this.player.player.body.setAllowGravity(false);
-
-            }
-
-            if (!this.player.player.onLadder){
-                if (this.downLad || this.upLad || this.rightLad || this.leftLad){
-                    this.player.player.body.setAllowGravity(true);
-                }
-            }
 
 
-        }
         //
 
 

@@ -38,7 +38,7 @@ class Ai{
         IaGestion2(ai){
             let dist = Phaser.Math.Distance.BetweenPoints(this.scene.player.player,ai);
 
-            if (dist <= 500 && this.aiDeath === false) {
+            if (dist <= 600 && this.aiDeath === false) {
                 return true;
             }
             else{
