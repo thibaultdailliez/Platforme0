@@ -34,6 +34,7 @@ class Balle  {
             me.scene.ai.ai.setVisible(false);
             me.scene.ai.ai.disableBody();
             me.scene.ai.aiDeath = true;
+            me.scene.roboHit.play();
 
 
         })

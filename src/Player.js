@@ -14,6 +14,7 @@ class Player {
         //ANIMATION
 
 
+
         this.scene.anims.create({
             key: 'idel',
             frames: this.scene.anims.generateFrameNames('player', {
@@ -95,22 +96,45 @@ class Player {
         if (this.scene.gauche == true ){
             this.scene.shield.setVisible(true);
             this.scene.shield.body.setEnable(true);
+            this.player.setVelocityX(0);
+            this.player.setVelocityY(0);
+            this.scene.shield.body.setSize(10,500);
+            this.scene.tweens.add({targets: this.scene.shield.body,
+                duration:200,repeat:0,
+                width: -200,
+                yoyo:true,
+            })
         }
-        else{
+
+        else {
             this.scene.shield.setVisible(true);
             this.scene.shield.body.setEnable(true);
+            this.player.setVelocityX(0);
+            this.player.setVelocityY(0);
+            this.scene.shield.body.setSize(10,500);
+            this.scene.tweens.add({targets: this.scene.shield.body,
+                duration:200,repeat:0,
+                width: 200,
+                yoyo:true,
+            })
         }
+
     }
 
     SwordUp(){
-        if (this.scene.gauche == true ){
+        if (this.scene.UpOn== true ){
             this.scene.shield.setVisible(true);
             this.scene.shield.body.setEnable(true);
+            this.player.setVelocityX(0);
+            this.player.setVelocityY(0);
+            this.scene.shield.body.setSize(250,10);
+            this.scene.tweens.add({targets: this.scene.shield.body,
+                duration:200,repeat:0,
+                height: -250,
+                yoyo:true,
+            })
         }
-        else{
-            this.scene.shield.setVisible(true);
-            this.scene.shield.body.setEnable(true);
-        }
+
     }
 
 

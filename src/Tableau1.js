@@ -16,8 +16,12 @@ class Tableau1 extends Phaser.Scene {
         this.load.image('Arme1','assets/images/square.png');
         this.load.image('shield','assets/images/shield.png' );
         this.load.image('save', 'assets/images/Save.png');
+        //sounds
+
         this.load.audio('song_sword','assets/sounds/song_sword.mp3');
         this.load.audio('Hit','assets/sounds/sword_hit.mp3');
+        this.load.audio('HitRobo','assets/sounds/roboHit.mp3');
+
         // idel
         this.load.atlas('player', 'assets/images/player_anim.png','assets/images/player_anim_atlas.json');
         this.load.image('AnimI1', 'assets/anim/AnimI1.png');
@@ -41,6 +45,7 @@ class Tableau1 extends Phaser.Scene {
         // sounds
         this.sword = this.sound.add('song_sword');
         this.swordHit = this.sound.add('Hit');
+        this.roboHit = this.sound.add('HitRobo');
 
 
 
@@ -105,7 +110,7 @@ class Tableau1 extends Phaser.Scene {
         // Création du bouclier
 
         this.shield = this.physics.add.sprite(200, 0,'shield').setOrigin(0, 0);
-        this.shield.setDisplaySize(10,100);
+        this.shield.body.setSize(10,500);
         this.shield.body.setAllowGravity(false);
         this.shield.setFlipX(true);
         this.shield.setVisible(false);
@@ -113,7 +118,7 @@ class Tableau1 extends Phaser.Scene {
         this.shield.body.setEnable(false);
 
 
-        // IA qui Tire
+        // move shield
 
 
 
@@ -266,6 +271,7 @@ class Tableau1 extends Phaser.Scene {
      {
         let me = this;
 
+
         this.input.keyboard.on('keydown', function(kevent)
         {
             switch (kevent.keyCode)
@@ -297,13 +303,13 @@ class Tableau1 extends Phaser.Scene {
 
                     break;
 
-                case Phaser.Input.Keyboard.KeyCodes.F:
+                case Phaser.Input.Keyboard.KeyCodes.M:
                     me.sword.play();
                     me.player.SwordRL();
 
                     break;
 
-                case Phaser.Input.Keyboard.KeyCodes.Z:
+                case Phaser.Input.Keyboard.KeyCodes.L:
                     me.UpOn = true;
                     me.sword.play();
                     me.player.SwordUp();
@@ -338,12 +344,12 @@ class Tableau1 extends Phaser.Scene {
                    }*/
                     break;
 
-                case Phaser.Input.Keyboard.KeyCodes.F:
+                case Phaser.Input.Keyboard.KeyCodes.M:
                     me.shield.setVisible(false)
                     me.shield.body.setEnable(false);
                     break;
 
-                case Phaser.Input.Keyboard.KeyCodes.Z:
+                case Phaser.Input.Keyboard.KeyCodes.L:
                     me.UpOn = false;
                     me.shield.setVisible(false)
                     me.shield.body.setEnable(false);
@@ -396,26 +402,26 @@ class Tableau1 extends Phaser.Scene {
 
         // on tp constament les shield au joueur
 
-        if (this.gauche == true ){
-            this.shield.setFlipX(true);
-            this.shield.x = this.player.player.x -110    ;
-            this.shield.y = this.player.player.y -100    ;
-        }
 
-        else {
-            this.shield.setFlipX(false);
-            this.shield.x = this.player.player.x + 110 ;
-            this.shield.y = this.player.player.y -100  ;
-        }
+            this.shield.x = this.player.player.x     ;
+            this.shield.y = this.player.player.y -100    ;
+
+
+
 
         if (this.UpOn == true ){
             this.shield.x = this.player.player.x    ;
-            this.shield.y = this.player.player.y -200  ;
+            this.shield.y = this.player.player.y  ;
+            this.shield.setDisplaySize(100,10);
+        }
+        else{
+            this.UpOn = false;
+            this.shield.setDisplaySize(10,100);
         }
 
-        else {
 
-        }
+
+
 
         /**CONDITIONS D'ANIMATIONS**/
         if (this.player.player.body.velocity.x === 0 && this.player.player.body.onFloor())
