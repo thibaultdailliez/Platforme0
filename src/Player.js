@@ -92,6 +92,19 @@ class Player {
             }
         }
     }
+    Shift(){
+        if (this.scene.leftDown) {
+            this.player.body.setSize(this.player.width - 10, this.player.height - 10).setOffset(10, 10);
+            this.player.setVelocityX(-100);//LE PERSONNAGE VA A UNE VITESSE DE <A UNE VITESSE DE 260 A GAUCHE
+        }
+        else if (this.scene.rightDown){
+
+            this.player.body.setSize(this.player.width - 10, this.player.height - 10).setOffset(10, 10);
+            this.player.setVelocityX(100);//LE PERSONNAGE VA A UNE VITESSE DE A UNE VITESSE DE 260 A DROITE
+
+
+        }
+    }
     SwordRL(){
         if (this.scene.gauche == true ){
             this.scene.shield.setVisible(true);

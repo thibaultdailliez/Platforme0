@@ -42,6 +42,7 @@ class Tableau1 extends Phaser.Scene {
         let me=this;
         this.gauche = true;
         this.touchP = false;
+        this.Y = 150;
         // sounds
         this.sword = this.sound.add('song_sword');
         this.swordHit = this.sound.add('Hit');
@@ -182,15 +183,15 @@ class Tableau1 extends Phaser.Scene {
 
 
         //Collider player
-        this.physics.add.collider(this.player.player, this.sol, this.SolCamera, null, this);
-        this.physics.add.collider(this.player.player, this.PlatformCam, this.PlatformCamera, null, this);
+        this.physics.add.collider(this.player.player, this.sol);
+        this.physics.add.collider(this.player.player, this.PlatformCam );
         this.physics.add.collider(this.player.player, this.enemy, this.playerHit, null, this);
         this.physics.add.overlap(this.player.player, this.saves, this.Save, null, this);
 
 
         this.initKeyboard();
 
-        this.cameras.main.startFollow(this.player.player, true, 0.1, 0.1, -350,150 );
+        this.cameras.main.startFollow(this.player.player, true, 0.1, 0.1, -350,this.Y);
         this.ai = new Ai(this);
         this.ai2 = new Ai(this);
         this.ai2.ai.x = 500;
@@ -249,22 +250,8 @@ class Tableau1 extends Phaser.Scene {
         save.body.enable = false;
 
     }
-    PlatformCamera(){
-        this.touchP = true;
 
-    }
-   SolCamera(){
-       this.touchP = false;
-    }
-    SwitchCam(){
-        if(this.touchP == true){
-            this.cameras.main.startFollow(this.player.player, true, 0.01, 0.01, -350,-85 );
 
-        }
-        else {
-            this.cameras.main.startFollow(this.player.player, true, 0.1, 0.1, -350,150 );
-        }
-    }
 
 
     initKeyboard()
@@ -278,11 +265,13 @@ class Tableau1 extends Phaser.Scene {
             {
                 case Phaser.Input.Keyboard.KeyCodes.D:
                     me.gauche = false;
+                    me.rightDown = true;
                     me.player.Right();
 
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.Q:
                     me.gauche = true;
+                    me.leftDown = true;
                     me.player.Left();
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.SPACE:
@@ -290,17 +279,7 @@ class Tableau1 extends Phaser.Scene {
                     me.player.Jump();
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.S:
-                    if (me.leftDown){
-                        me.player.player.setVelocityX(-100);//LE PERSONNAGE VA A UNE VITESSE DE <A UNE VITESSE DE 260 A GAUCHE
-                    }
-                    else if (me.rightDown){
-                        me.player.player.setVelocityX(100);//LE PERSONNAGE VA A UNE VITESSE DE A UNE VITESSE DE 260 A DROITE
-                    }
-                    if (me.player.player.body.onFloor()) {
-                        me.player.player.body.setSize(me.player.width-40, me.player.height-60).setOffset(20, 30);
-                    }
-                    me.downLad = true;
-
+                    me.player.Shift();
                     break;
 
                 case Phaser.Input.Keyboard.KeyCodes.M:
@@ -322,12 +301,14 @@ class Tableau1 extends Phaser.Scene {
             switch (kevent.keyCode) {
                 case Phaser.Input.Keyboard.KeyCodes.D:
                     me.player.player.setVelocityX(0);
+                    me.rightDown = false;
                     if (me.player.player.body.onFloor()) {
                         me.player.player.play('idel');
                     }
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.Q:
                     me.player.player.setVelocityX(0);
+                    me.leftDown = false;
                     if (me.player.player.body.onFloor()) {
                        me.player.player.play('idel');
                    }
@@ -336,12 +317,10 @@ class Tableau1 extends Phaser.Scene {
                    me.dejaAppuye = false;
                    break;
                case Phaser.Input.Keyboard.KeyCodes.S:
-                   me.player.player.y = me.player.player.y - 27;
-                   me.player.player.body.setSize(me.player.player.width-40, me.player.player.height-30).setOffset(20, 30);
-                   /*if (me.player.body.onFloor()) {
-                       me.player.y = me.player.y - 27;
-                       me.player.body.setSize(me.player.width-40, me.player.height-30).setOffset(20, 30);
-                   }*/
+                   if (me.player.player.body.onFloor()) {
+                       me.player.player.y = me.player.player.y - 27;
+                       me.player.player.body.setSize(me.player.player.width-65, me.player.player.height-20).setOffset(40, 18);
+                   }
                     break;
 
                 case Phaser.Input.Keyboard.KeyCodes.M:
@@ -370,6 +349,13 @@ class Tableau1 extends Phaser.Scene {
         for(var i = 0; i < this.projectiles.getChildren().length; i++){
             var tir = this.projectiles.getChildren()[i];
             tir.update();
+        }
+
+        if(this.player.player.body.velocity.y > 0){
+            this.Y -=1;
+        }
+        else{
+            this.Y = 150;
         }
 
 
