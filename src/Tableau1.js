@@ -43,6 +43,7 @@ class Tableau1 extends Phaser.Scene {
         this.gauche = true;
         this.touchP = false;
         this.Y = 150;
+        this.Down = false;
         // sounds
         this.sword = this.sound.add('song_sword');
         this.swordHit = this.sound.add('Hit');
@@ -279,7 +280,9 @@ class Tableau1 extends Phaser.Scene {
                     me.player.Jump();
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.S:
+                    me.Down = true;d
                     me.player.Shift();
+
                     break;
 
                 case Phaser.Input.Keyboard.KeyCodes.M:
@@ -317,10 +320,11 @@ class Tableau1 extends Phaser.Scene {
                    me.dejaAppuye = false;
                    break;
                case Phaser.Input.Keyboard.KeyCodes.S:
-                   if (me.player.player.body.onFloor()) {
-                       me.player.player.y = me.player.player.y - 27;
-                       me.player.player.body.setSize(me.player.player.width-65, me.player.player.height-20).setOffset(40, 18);
-                   }
+                   me.player.player.body.setSize( me.player.player.sourceWidth,  me.player.player.sourceHeight, true).setOffset(40, 0);;
+                   me.Down = false;
+                   me.leftDown = false;
+                   me.rightDown = false;
+
                     break;
 
                 case Phaser.Input.Keyboard.KeyCodes.M:
@@ -351,15 +355,6 @@ class Tableau1 extends Phaser.Scene {
             tir.update();
         }
 
-        if(this.player.player.body.velocity.y > 0){
-            this.Y -=1;
-        }
-        else{
-            this.Y = 150;
-        }
-
-
-
 
 
         //this.ai.IaGestion2(this.ai.ai,this.ai.dist)
@@ -379,11 +374,6 @@ class Tableau1 extends Phaser.Scene {
             this.respawnAi=false;
 
         } */
-
-
-
-
-
 
 
         // on tp constament les shield au joueur

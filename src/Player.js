@@ -51,7 +51,12 @@ class Player {
 
     }
     Right(){
-        this.player.setVelocityX(400);
+        if (this.scene.Down) {
+            this.player.setVelocityX(100);//LE PERSONNAGE VA A UNE VITESSE DE <A UNE VITESSE DE 260 A GAUCHE
+        }
+        else{
+            this.player.setVelocityX(400);
+        }
         this.player.setFlipX(false);
         if (this.player.body.onFloor()) {
             this.player.play('walk', true);
@@ -62,7 +67,12 @@ class Player {
 
     }
     Left(){
-        this.player.setVelocityX(-400);
+        if (this.scene.Down) {
+            this.player.setVelocityX(-100);//LE PERSONNAGE VA A UNE VITESSE DE <A UNE VITESSE DE 260 A GAUCHE
+        }
+        else{
+            this.player.setVelocityX(-400);
+        }
         this.player.setFlipX(true);
         if (this.player.body.onFloor()) {
             this.player.play('walk', true);
@@ -70,6 +80,7 @@ class Player {
         else{
             this.player.play('walk', false);
         }
+
     }
     Jump(){
         if (this.dejaAppuye== false) {
@@ -93,18 +104,19 @@ class Player {
         }
     }
     Shift(){
+            this.player.body.setOffset(50,280);
+            this.player.body.setSize( 100, 40, false);
+            this.scene.Down = true;
+
         if (this.scene.leftDown) {
-            this.player.body.setSize(this.player.width - 10, this.player.height - 10).setOffset(10, 10);
-            this.player.setVelocityX(-100);//LE PERSONNAGE VA A UNE VITESSE DE <A UNE VITESSE DE 260 A GAUCHE
+            this.player.Left();//LE PERSONNAGE VA A UNE VITESSE DE <A UNE VITESSE DE 260 A GAUCHE
         }
         else if (this.scene.rightDown){
-
-            this.player.body.setSize(this.player.width - 10, this.player.height - 10).setOffset(10, 10);
-            this.player.setVelocityX(100);//LE PERSONNAGE VA A UNE VITESSE DE A UNE VITESSE DE 260 A DROITE
-
-
+            this.player.Right();//LE PERSONNAGE VA A UNE VITESSE DE A UNE VITESSE DE 260 A DROITE
         }
+
     }
+
     SwordRL(){
         if (this.scene.gauche == true ){
             this.scene.shield.setVisible(true);
