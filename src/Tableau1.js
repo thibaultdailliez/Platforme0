@@ -112,7 +112,7 @@ class Tableau1 extends Phaser.Scene {
         // Création du bouclier
 
         this.shield = this.physics.add.sprite(200, 0,'shield').setOrigin(0, 0);
-        this.shield.body.setSize(10,500);
+        this.shield.body.setSize(20,200);
         this.shield.body.setAllowGravity(false);
         this.shield.setFlipX(true);
         this.shield.setVisible(false);
@@ -160,7 +160,6 @@ class Tableau1 extends Phaser.Scene {
         this.projectiles = this.add.group();
 
 
-        this.time.addEvent({ delay: 500, callback: this.tir, callbackScope: this,loop : true });
 
         /**GAMEOBJECTS**/
 
@@ -192,13 +191,10 @@ class Tableau1 extends Phaser.Scene {
 
         this.initKeyboard();
 
-        this.cameras.main.startFollow(this.player.player, true, 0.1, 0.1, -350,this.Y);
+        this.cameras.main.startFollow(this.player.player, true, 0.1, 0.1, -350,100);
         this.ai = new Ai(this);
-        this.ai2 = new Ai(this);
-        this.ai2.ai.x = 500;
-        this.balle = new Balle(this);
 
-        this.ai.tir(this.ai.ai)
+
     }
     /*
     text(player,dialog){
@@ -350,18 +346,10 @@ class Tableau1 extends Phaser.Scene {
 
     update()
     {
-        for(var i = 0; i < this.projectiles.getChildren().length; i++){
-            var tir = this.projectiles.getChildren()[i];
-            tir.update();
-        }
+        this.ai.update();
 
 
 
-        //this.ai.IaGestion2(this.ai.ai,this.ai.dist)
-
-
-        // this.ai.IaGestion2(this.ai2.ai,this.ai2.dist)
-        // this.ai.tir()
 
         /*
         if(this.respawnAi===true){
@@ -379,20 +367,21 @@ class Tableau1 extends Phaser.Scene {
         // on tp constament les shield au joueur
 
 
-            this.shield.x = this.player.player.x     ;
-            this.shield.y = this.player.player.y -100    ;
+
 
 
 
 
         if (this.UpOn == true ){
-            this.shield.x = this.player.player.x    ;
-            this.shield.y = this.player.player.y  ;
-            this.shield.setDisplaySize(100,10);
+            this.shield.x = this.player.player.x +10   ;
+            this.shield.y = this.player.player.y -200 ;
+            this.shield.body.setSize(200,20);
+
         }
         else{
             this.UpOn = false;
-            this.shield.setDisplaySize(10,100);
+            this.shield.body.setSize(20,200);
+
         }
 
 

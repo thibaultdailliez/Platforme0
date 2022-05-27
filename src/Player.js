@@ -55,7 +55,7 @@ class Player {
             this.player.setVelocityX(100);//LE PERSONNAGE VA A UNE VITESSE DE <A UNE VITESSE DE 260 A GAUCHE
         }
         else{
-            this.player.setVelocityX(400);
+            this.player.setVelocityX(650);
         }
         this.player.setFlipX(false);
         if (this.player.body.onFloor()) {
@@ -71,7 +71,7 @@ class Player {
             this.player.setVelocityX(-100);//LE PERSONNAGE VA A UNE VITESSE DE <A UNE VITESSE DE 260 A GAUCHE
         }
         else{
-            this.player.setVelocityX(-400);
+            this.player.setVelocityX(-650);
         }
         this.player.setFlipX(true);
         if (this.player.body.onFloor()) {
@@ -91,16 +91,7 @@ class Player {
                 this.player.setVelocityY(-1000);
                 this.DashOn = 1;
             }
-            if (this.DashOn === 1 && !this.player.body.onFloor()) {
-                if(this.scene.gauche === true){
-                    this.player.x = this.player.x -100;
-                }
-                else{
-                    this.player.x = this.player.x +100;
-                }
-                this.player.setVelocityY(-300);
-                this.DashOn = 0;
-            }
+
         }
     }
     Shift(){
@@ -118,11 +109,11 @@ class Player {
     }
 
     SwordRL(){
+        this.player.setVelocityX(0);
+        this.player.setVelocityY(0);
         if (this.scene.gauche == true ){
             this.scene.shield.setVisible(true);
             this.scene.shield.body.setEnable(true);
-            this.player.setVelocityX(0);
-            this.player.setVelocityY(0);
             this.scene.shield.body.setSize(10,500);
             this.scene.tweens.add({targets: this.scene.shield.body,
                 duration:200,repeat:0,
@@ -134,8 +125,6 @@ class Player {
         else {
             this.scene.shield.setVisible(true);
             this.scene.shield.body.setEnable(true);
-            this.player.setVelocityX(0);
-            this.player.setVelocityY(0);
             this.scene.shield.body.setSize(10,500);
             this.scene.tweens.add({targets: this.scene.shield.body,
                 duration:200,repeat:0,
@@ -147,11 +136,11 @@ class Player {
     }
 
     SwordUp(){
+        this.player.setVelocityX(0);
+        this.player.setVelocityY(0);
         if (this.scene.UpOn== true ){
             this.scene.shield.setVisible(true);
             this.scene.shield.body.setEnable(true);
-            this.player.setVelocityX(0);
-            this.player.setVelocityY(0);
             this.scene.shield.body.setSize(250,10);
             this.scene.tweens.add({targets: this.scene.shield.body,
                 duration:200,repeat:0,

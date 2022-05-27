@@ -1,10 +1,10 @@
 class Balle  {
-    constructor(Tableau1){
+    constructor(Tableau1,ai){
         let me = this
         this.rand =  Math.random() * (100 - (-100)) + (-100);
         this.respawnAi=false;
         this.scene= Tableau1
-        this.balle = this.scene.physics.add.sprite(this.scene.ai.ai.x, this.scene.ai.ai.y, 'balle').setOrigin(0, 0);
+        this.balle = this.scene.physics.add.sprite(this.scene.ai2.ai.x, this.scene.ai2.ai.y, 'balle').setOrigin(0, 0);
         this.balle.setDisplaySize(5,5);
         this.balle.body.setBounce(1.1,1.1);
         this.balle.body.setMaxVelocityX(800);

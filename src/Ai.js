@@ -1,52 +1,77 @@
-class Ai{
+class Ai {
+
+
     constructor(Tableau1) {
-        let me = this
         this.scene = Tableau1
-        this.tireD = false;
-        this.aiDeath = false;
-        //
-        this.ai = this.scene.physics.add.sprite(1700, 215, 'grenouille').setOrigin(0, 0);
-        this.ai.setDisplaySize(50, 150);
-        this.ai.body.setAllowGravity(true);
-        this.ai.setVisible(true);
+        this.sprite = this.scene.physics.add.sprite(2000,10,'grenouille');
+        this.sprite.setDisplaySize(50,150 );
+        this.scene.physics.add.collider(this.sprite,this.scene.sol);
+        this.projectil=false;
 
-        this.dist = Phaser.Math.Distance.BetweenPoints(this.scene.player.player,this.ai);
+        /*  this.scene.anims.create(
+               {
+                   key: 'walkfeu',
+                   frames: this.scene.anims.generateFrameNumbers('walkfeu', { start: 1, end: 7 }),
+                   frameRate: 16,
+                   repeat: -1,
+               });
+           this.enemy.play('walkfeu')
 
-
-
-        this.scene.physics.add.collider(this.ai, this.scene.sol);
-
-        //
+           this.scene.anims.create(
+               {
+                   key: 'idlefeu',
+                   frames: this.scene.anims.generateFrameNumbers('idlefeu', { start: 1, end: 7 }),
+                   frameRate: 12,
+                   repeat: -1
+               });
+           this.sprite.play('idlefeu')*/
     }
 
+    update(){
+        if(Phaser.Math.Distance.Between(this.scene.player.player.x,this.scene.player.player.y,this.sprite.x,this.sprite.y)<500){
+            this.fire()
+        }
+    }
+    fire(){
+        if(this.projectil===false) {
+            this.projectil = true
+            this.balle = this.scene.physics.add.sprite(this.sprite.x, this.sprite.y, 'Arme1').setSize(5, 5).setDisplaySize(5, 5)
+            this.balle.body.setAllowGravity(false)
+            this.scene.physics.moveTo(this.balle, this.scene.player.player.x,this.scene.player.player.y)
+            this.balle.setVelocityX(this.balle.body.velocity.x*5)
+            this.balle.setVelocityY(this.balle.body.velocity.y*5)
+            const life=this.scene.time.delayedCall(4000,()=>{
+                this.balle.destroy()
+                this.projectil=false
+                console.log('yolo')
+            })
+            this.scene.physics.add.overlap(this.balle, this.scene.player.player, (balle, player) => {
+                this.balle.destroy(true);
+                this.scene.player.player.x = this.scene.savesX;
+                this.scene.player.player.y = this.scene.savesY;
+            }, null, this)
+
+            this.scene.physics.add.collider(this.balle, this.scene.shield, function () {
+                console.log('toucheShieldd');
+                this.scene.physics.moveTo(this.balle,this.sprite.x,this.sprite.y + this.rand,200);
+                console.log(this.rand)
+                this.scene.swordHit.play();
 
 
-        tir(ai){
-            this.Reset = this.scene.time.addEvent({
-                delay: 500,
-                callback: ()=>{
-                    if (this.IaGestion2(ai) === true){
-                        console.log("tire")
-                        new Balle(this.scene);
-                    }
-                },
-                loop: false,
+            })
+            this.scene.physics.add.collider(this.balle, this.sprite, function () {
+                console.log('toucheAI');
+                this.balle.destroy(true);
+                this.sprite.setVisible(false);
+                this.sprite.disableBody();
+
+
+
+
             })
         }
-
-
-        IaGestion2(ai){
-            let dist = Phaser.Math.Distance.BetweenPoints(this.scene.player.player,ai);
-
-            if (dist <= 600 && this.aiDeath === false) {
-                return true;
-            }
-            else{
-                return false;
-                console.log(dist)
-            }
-
-        }
-
-
     }
+
+
+
+}
