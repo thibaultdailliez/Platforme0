@@ -9,6 +9,9 @@ class Tableau1 extends Phaser.Scene {
         // At last image must be loaded with its JSON
         //this.load.atlas('player', 'assets/images/kenney_player.png','assets/images/kenney_player_atlas.json');
         this.load.image('tiles', 'assets/tilesets/platformPack_tilesheet.png');
+        this.load.image('tiles_asset', 'assets/tilesets/asset.png');
+        this.load.image('tiles_zazaz', 'assets/tilesets/zazaz.png');
+        this.load.image('backFond', 'assets/tilesets/fond.png');
         // Load the export Tiled JSON
         this.load.tilemapTiledJSON('map', 'assets/tilemaps/levelTry.json');
 
@@ -23,15 +26,12 @@ class Tableau1 extends Phaser.Scene {
         this.load.audio('HitRobo','assets/sounds/roboHit.mp3');
 
         // idel
-        this.load.atlas('player', 'assets/images/player_anim.png','assets/images/player_anim_atlas.json');
-        this.load.image('AnimI1', 'assets/anim/AnimI1.png');
-        this.load.image('AnimI2', 'assets/anim/AnimI2.png');
-        this.load.image('AnimI3', 'assets/anim/AnimI3.png');
-        this.load.image('AnimI4', 'assets/anim/AnimI4.png');
-        this.load.image('AnimI5', 'assets/anim/AnimI5.png');
-        this.load.image('AnimI6', 'assets/anim/AnimI6.png');
-        this.load.image('AnimI7', 'assets/anim/AnimI7.png');
-        this.load.image('AnimI8', 'assets/anim/AnimI8.png');
+        //this.load.atlas('player', 'assets/images/anim_player.png','assets/images/anim_player_atlas.json');
+        this.load.spritesheet('idle', 'assets/images/idle.png', { frameWidth: 383, frameHeight: 505 });
+        this.load.spritesheet('run', 'assets/images/run.png', { frameWidth: 383, frameHeight: 505 });
+        this.load.spritesheet('couprl', 'assets/images/couprl.png', { frameWidth: 383, frameHeight: 505 });
+        this.load.spritesheet('couph', 'assets/images/couph.png', { frameWidth: 383, frameHeight: 505 });
+
 
     }
 
@@ -42,8 +42,7 @@ class Tableau1 extends Phaser.Scene {
         let me=this;
         this.gauche = true;
         this.touchP = false;
-        this.Y = 150;
-        this.Down = false;
+        this.AOn = false;
         // sounds
         this.sword = this.sound.add('song_sword');
         this.swordHit = this.sound.add('Hit');
@@ -61,9 +60,22 @@ class Tableau1 extends Phaser.Scene {
 
         const map = this.make.tilemap({ key: 'map' });
         const tileset = map.addTilesetImage('project_platformer', 'tiles');
-        const platforms = map.createStaticLayer('Platforms', tileset, 0, 100).setOrigin(0,0);
-        //platforms.setCollisionByExclusion(-1, true);
+        const asset = map.addTilesetImage('asset', 'tiles_asset')
+        const zazaz = map.addTilesetImage('zazaz', 'tiles_zazaz');
+        const backfond = map.addTilesetImage('fond', 'backFond');
+
+        this.CP5fond = map.createLayer('P5fond', backfond,0,0);
+        this.CP3 = map.createLayer('P3', zazaz,0,140);
+        this.Herbe = map.createLayer('herbe', zazaz,0,140);
+        this.CP2 = map.createLayer('P2sol', asset,0,140);
+
         this.player = new Player(this);
+        this.CPporte = map.createLayer('Pporte', asset,0,100);
+        this.CP1 = map.createLayer('P1', asset,0,100);
+
+
+        //platforms.setCollisionByExclusion(-1, true);
+
         this.savesX = this.player.player.x;
         this.savesY = this.player.player.y;
 
@@ -111,13 +123,23 @@ class Tableau1 extends Phaser.Scene {
 
         // Création du bouclier
 
-        this.shield = this.physics.add.sprite(200, 0,'shield').setOrigin(0, 0);
+        this.shield = this.physics.add.sprite(200, 100,'shield').setOrigin(0, 0);
         this.shield.body.setSize(20,200);
         this.shield.body.setAllowGravity(false);
         this.shield.setFlipX(true);
         this.shield.setVisible(false);
         this.shield.setImmovable(true);
         this.shield.body.setEnable(false);
+
+        this.shield2 = this.physics.add.sprite(400, 100,'shield').setOrigin(0, 0);
+        this.shield2.body.setSize(200,20);
+        this.shield2.body.setAllowGravity(false);
+        this.shield2.setVisible(false);
+        this.shield2.setImmovable(true);
+        this.shield2.body.setEnable(false);
+
+
+
 
 
         // move shield
@@ -140,13 +162,13 @@ class Tableau1 extends Phaser.Scene {
             this.sol.add(solSprite);
         });
 
-        this.PlatformCam = this.physics.add.group({
+        this.Platformai = this.physics.add.group({
             allowGravity: false,
             immovable: true
         });
-        map.getObjectLayer('Platform').objects.forEach((platformcam) => {
-            const PlaformCamSprite = this.physics.add.sprite(platformcam.x+(platformcam.width*0.5),platformcam.y + (platformcam.height*0.5) + 100).setSize(platformcam.width,platformcam.height);
-            this.PlatformCam.add(PlaformCamSprite);
+        map.getObjectLayer('Platform').objects.forEach((platformai) => {
+            const PlaformAiSprite = this.physics.add.sprite(platformai.x+(platformai.width*0.5),platformai.y + (platformai.height*0.5) + 140).setSize(platformai.width,platformai.height);
+            this.Platformai.add(PlaformAiSprite);
         });
 
 
@@ -184,15 +206,18 @@ class Tableau1 extends Phaser.Scene {
 
         //Collider player
         this.physics.add.collider(this.player.player, this.sol);
-        this.physics.add.collider(this.player.player, this.PlatformCam );
         this.physics.add.collider(this.player.player, this.enemy, this.playerHit, null, this);
         this.physics.add.overlap(this.player.player, this.saves, this.Save, null, this);
 
 
+
         this.initKeyboard();
 
-        this.cameras.main.startFollow(this.player.player, true, 0.1, 0.1, -350,100);
+        this.cameras.main.startFollow(this.player.player, true, 0.05, 0.05, -350,100);
         this.ai = new Ai(this);
+        this.ai2 = new Ai(this);
+        this.ai2.sprite.x = 5000;
+        this.ai2.sprite.y = 200;
 
 
     }
@@ -272,24 +297,21 @@ class Tableau1 extends Phaser.Scene {
                     me.player.Left();
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.SPACE:
-                    me.upLad = true;
                     me.player.Jump();
                     break;
-                case Phaser.Input.Keyboard.KeyCodes.S:
-                    me.Down = true;d
-                    me.player.Shift();
 
-                    break;
 
                 case Phaser.Input.Keyboard.KeyCodes.M:
+                    me.AOn = true;
                     me.sword.play();
                     me.player.SwordRL();
 
                     break;
 
                 case Phaser.Input.Keyboard.KeyCodes.L:
-                    me.UpOn = true;
+                    me.AOn = true;
                     me.sword.play();
+                    me.UpOn = true;
                     me.player.SwordUp();
 
                     break;
@@ -315,23 +337,18 @@ class Tableau1 extends Phaser.Scene {
                case Phaser.Input.Keyboard.KeyCodes.SPACE:
                    me.dejaAppuye = false;
                    break;
-               case Phaser.Input.Keyboard.KeyCodes.S:
-                   me.player.player.body.setSize( me.player.player.sourceWidth,  me.player.player.sourceHeight, true).setOffset(40, 0);;
-                   me.Down = false;
-                   me.leftDown = false;
-                   me.rightDown = false;
-
-                    break;
 
                 case Phaser.Input.Keyboard.KeyCodes.M:
+                    me.AOn = false;
                     me.shield.setVisible(false)
                     me.shield.body.setEnable(false);
                     break;
 
                 case Phaser.Input.Keyboard.KeyCodes.L:
+                    me.AOn = false;
                     me.UpOn = false;
-                    me.shield.setVisible(false)
-                    me.shield.body.setEnable(false);
+                    me.shield2.setVisible(false)
+                    me.shield2.body.setEnable(false);
                     break;
             }
         });
@@ -341,12 +358,49 @@ class Tableau1 extends Phaser.Scene {
 
         obstacle.body.setEnable(false);
         obstacle.setVisible(false);
-    }
+    }D
 
 
     update()
     {
         this.ai.update();
+        this.ai2.update();
+
+
+       /* if (this.gauche == true ){
+            this.shield.x = this.player.player.x -250 ;
+            this.shield.y = this.player.player.y -200;
+        }
+
+        else {
+            this.shield.x = this.player.player.x +150 ;
+            this.shield.y = this.player.player.y -200;
+
+        }
+        if (this.UpOn == true ){
+            this.shield2.x = this.player.player.x  ;
+            this.shield2.y = this.player.player.y -400;
+        }
+
+        if (this.rightDown && this.AOn){
+            this.player.player.setVelocityX(0);
+            this.player.player.setVelocityY(0);
+        }
+
+        if (this.leftDown && this.AOn){
+            this.player.player.setVelocityX(0);
+            this.player.player.setVelocityY(0);
+        }
+*/
+
+
+
+
+        
+
+
+
+
 
 
 
@@ -372,17 +426,7 @@ class Tableau1 extends Phaser.Scene {
 
 
 
-        if (this.UpOn == true ){
-            this.shield.x = this.player.player.x +10   ;
-            this.shield.y = this.player.player.y -200 ;
-            this.shield.body.setSize(200,20);
 
-        }
-        else{
-            this.UpOn = false;
-            this.shield.body.setSize(20,200);
-
-        }
 
 
 

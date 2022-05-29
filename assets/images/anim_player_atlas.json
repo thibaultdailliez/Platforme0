@@ -1,0 +1,372 @@
+{
+    "frames": [
+        {
+            "filename": "idel1",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 0,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "idel2",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 383,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "idel3",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 766,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "idel4",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 1149,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "idel5",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 1532,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "idel6",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 1915,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "idel7",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 2298,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "idel8",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 2681,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "couprl1",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 0,
+                "y": 505
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "couprl2",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 383,
+                "y": 505
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "couprl3",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 766,
+                "y": 505
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "couprl4",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 1149,
+                "y": 505
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "couprl5",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 1532,
+                "y": 505
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "couprl6",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 1915,
+                "y": 505
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "couprl7",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 2298,
+                "y": 505
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "couph1",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 0,
+                "y": 1010
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "couph2",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 383,
+                "y": 1010
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "couph3",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 766,
+                "y": 1010
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "couph4",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 1149,
+                "y": 1010
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "couph5",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 1532,
+                "y": 1010
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "couph6",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 1915,
+                "y": 1010
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "couph7",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 2298,
+                "y": 1010
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "run1",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 0,
+                "y": 1515
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "run2",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 383,
+                "y": 1515
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "run3",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 766,
+                "y": 1515
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "run4",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 1149,
+                "y": 1515
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "run5",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 1532,
+                "y": 1515
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "run6",
+            "frame": {
+                "w": 383,
+                "h": 505,
+                "x": 1915,
+                "y": 1515
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+    ],
+    "meta": {
+        "description": "Atlas generado con Atlas Packer Gamma V2",
+        "web": "https://gammafp.github.io/atlas-packer-phaser/"
+    }
+}
