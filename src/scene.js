@@ -1,11 +1,12 @@
-class Tableau1 extends Phaser.Scene {
+class Scene extends Phaser.Scene {
 
     preload() {
         this.load.image('background', 'assets/images/background.png');
         this.load.image('door', 'assets/images/door.png');
         this.load.image('key', 'assets/images/key.png');
+        this.load.image('key', 'assets/images/key.png');
         this.load.image('ladder', 'assets/images/ladder.png');
-        this.load.image('enemy', 'assets/images/enemy.png');
+        this.load.image('ennemy', 'assets/images/Ennemy.png');
         // At last image must be loaded with its JSON
         //this.load.atlas('player', 'assets/images/kenney_player.png','assets/images/kenney_player_atlas.json');
         this.load.image('tiles', 'assets/tilesets/platformPack_tilesheet.png');
@@ -31,6 +32,10 @@ class Tableau1 extends Phaser.Scene {
         this.load.spritesheet('run', 'assets/images/run.png', { frameWidth: 383, frameHeight: 505 });
         this.load.spritesheet('couprl', 'assets/images/couprl.png', { frameWidth: 383, frameHeight: 505 });
         this.load.spritesheet('couph', 'assets/images/couph.png', { frameWidth: 383, frameHeight: 505 });
+
+        //particul
+        this.load.image('feu', 'assets/images/feu.png');
+        this.load.image('feu2', 'assets/images/feu2.png');
 
 
     }
@@ -67,6 +72,7 @@ class Tableau1 extends Phaser.Scene {
         this.CP5fond = map.createLayer('P5fond', backfond,0,0);
         this.CP3 = map.createLayer('P3', zazaz,0,140);
         this.Herbe = map.createLayer('herbe', zazaz,0,140);
+        this.Respawn = map.createLayer('respawn', asset,0,160);
         this.CP2 = map.createLayer('P2sol', asset,0,140);
 
         this.player = new Player(this);
@@ -87,7 +93,7 @@ class Tableau1 extends Phaser.Scene {
         });
 
         map.getObjectLayer('Save').objects.forEach((save) => {
-            const saveSprite = this.saves.create(save.x, save.y  - save.height + 100, 'save').setOrigin(0);
+            const saveSprite = this.saves.create(save.x, save.y  - save.height + 120,).setOrigin(0);
         });
 
         /*/ TEXT
@@ -106,15 +112,6 @@ class Tableau1 extends Phaser.Scene {
         this.lock=0
 
         */
-
-
-
-
-
-
-
-
-
 
         //idel creat
 
@@ -142,7 +139,61 @@ class Tableau1 extends Phaser.Scene {
 
 
 
-        // move shield
+        // particul
+        this.feuParticles = this.add.particles('feu');
+        this.feuParticles.createEmitter({
+            speed: 100,
+            lifespan: 1500,
+            quantity: 100,
+            //gravityY: 500,
+            scale: {start: 0.5, end: 1},
+            alpha: { start: 1, end: 0 },
+            angle: { min: -100, max: -80 },
+           // blendMode: 'ADD',
+            on: false
+        });
+
+        this.feuFX = {
+
+            frequency:100,
+            lifespan: 2000,
+            quantity:10,
+            x:{min:-20,max:20},
+            y:{min:-10,max:0},
+            rotate: {min:-10,max:10},
+            speedX: { min: -20, max: 20 },
+            speedY: { min: -100, max: -10 },
+            scale: {start: 0, end: 1},
+            alpha: { start: 1, end: 0 },
+           // blendMode: Phaser.BlendModes.ADD,
+        };
+        this.feuParticles = this.add.particles('feu2');
+        this.feuParticles.createEmitter({
+            speed: 100,
+            lifespan: 1500,
+            quantity: 100,
+            //gravityY: 500,
+            scale: {start: 0.5, end: 1},
+            alpha: { start: 1, end: 0 },
+            angle: { min: -100, max: -80 },
+            blendMode: 'ADD',
+            on: false
+        });
+
+        this.feuFX2 = {
+
+            frequency:100,
+            lifespan: 2000,
+            quantity:10,
+            x:{min:-20,max:10},
+            y:{min:-10,max:0},
+            rotate: {min:-10,max:10},
+            speedX: { min: -20, max: 20 },
+            speedY: { min: -100, max: -10 },
+            scale: {start: 0, end: 1},
+            alpha: { start: 1, end: 0 },
+            blendMode: Phaser.BlendModes.ADD,
+        };
 
 
 
@@ -203,6 +254,22 @@ class Tableau1 extends Phaser.Scene {
         });
 
 
+        //bernards
+        /*
+        this.bernards = this.physics.add.group({
+            allowGravity: false,
+            immovable: true
+        });
+
+         */
+        map.getObjectLayer('bernards').objects.forEach((bernard) => {
+            let monBernard=new Bernard(this,bernard.x,bernard.y);
+            //const bernardSprite = this.bernards.create(bernard.x, bernard.y).setOrigin(0);
+            //bernardSprite.body.setSize(enemy.width, enemy.height).setOffset(0, 0);
+
+        });
+
+
 
         //Collider player
         this.physics.add.collider(this.player.player, this.sol);
@@ -214,10 +281,8 @@ class Tableau1 extends Phaser.Scene {
         this.initKeyboard();
 
         this.cameras.main.startFollow(this.player.player, true, 0.05, 0.05, -350,100);
-        this.ai = new Ai(this);
-        this.ai2 = new Ai(this);
-        this.ai2.sprite.x = 5000;
-        this.ai2.sprite.y = 200;
+
+
 
 
     }
@@ -270,6 +335,14 @@ class Tableau1 extends Phaser.Scene {
         console.log("save", this.savesX, this.savesY);
         save.visible = false;
         save.body.enable = false;
+        this.emitFeu = this.add.particles('feu'); //On charge les particules à appliquer au layer
+        this.emitFeu.createEmitter(this.feuFX); //On crée l'émetteur
+        this.emitFeu.x = save.x +30;
+        this.emitFeu.y = save.y +5;
+        this.emitFeu2 = this.add.particles('feu2'); //On charge les particules à appliquer au layer
+        this.emitFeu2.createEmitter(this.feuFX2); //On crée l'émetteur
+        this.emitFeu2.x = save.x +30;
+        this.emitFeu2.y = save.y +15;
 
     }
 
@@ -363,9 +436,10 @@ class Tableau1 extends Phaser.Scene {
 
     update()
     {
-        this.ai.update();
-        this.ai2.update();
 
+        Bernard.tousLesBernards.forEach(bernard=>{
+            bernard.update();
+        });
 
        /* if (this.gauche == true ){
             this.shield.x = this.player.player.x -250 ;

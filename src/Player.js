@@ -1,7 +1,8 @@
 class Player {
-    constructor(Tableau1, Balle, ai){
+    constructor(scene){
         let me = this
-        this.scene= Tableau1
+        this.scene= scene
+        this.toucheshield = false;
         this.rand =  Math.random() * (100 - (-100)) + (-100);
         this.shieldOn = false
         this.player = this.scene.physics.add.sprite(100, 600, 'idle');
@@ -15,64 +16,6 @@ class Player {
 
         //ANIMATION
 
-
-
-        /*this.scene.anims.create({
-            key: 'idel',
-            frames: this.scene.anims.generateFrameNames('player', {
-                prefix: 'idel',
-                start: 1,
-                end: 8,
-            }),
-            frameRate: 5,
-            repeat: -1
-        });
-
-        this.scene.anims.create({
-            key: 'run',
-            frames: this.scene.anims.generateFrameNames('player', {
-                prefix: 'run',
-                start: 1,
-                end: 6,
-            }),
-            frameRate: 5,
-            repeat: -1
-        });
-
-        this.scene.anims.create({
-            key: 'couprl',
-            frames: this.scene.anims.generateFrameNames('player', {
-                prefix: 'couprl',
-                start: 1,
-                end: 7,
-            }),
-            frameRate: 10,
-            repeat: -1});
-
-        this.scene.anims.create({
-            key: 'couph',
-            frames: this.scene.anims.generateFrameNames('player', {
-                prefix: 'couph',
-                start: 1,
-                end: 7,
-            }),
-            frameRate: 10,
-            repeat: -1});
-
-
-
-        this.scene.anims.create({
-            key: 'jump',
-            frames: this.scene.anims.generateFrameNames('player', {
-                prefix: 'jump',
-                start: 1,
-                end: 6,
-            }),
-            frameRate: 10,
-            repeat: -1
-        });
-
-         */
         this.scene.anims.create({
             key: 'idel',
             frames: this.scene.anims.generateFrameNumbers('idle', { start: 0, end: 7 }),//CE SONT LES IMAGES 0/1/2/3 QUI SONT JOUEES
@@ -105,11 +48,14 @@ class Player {
                 this.shieldOn = true
                 this.shieldObjet = this.scene.physics.add.sprite(this.player.x, this.player.y, 'shield').setSize(200, 300).setDisplaySize(200, 300)
                 this.shieldObjet.body.setAllowGravity(false)
-                if (this.scene.gauche == true ){
+                if (this.scene.gauche === true ){
                     this.scene.physics.moveTo(this.shieldObjet, this.scene.player.player.x , this.scene.player.player.y)
+                    this.shieldObjet.setVelocityX(this.shieldObjet.body.velocity.x = -100)
+                    this.shieldObjet.setVelocityX(this.shieldObjet.body.velocity.y = -100)
                 }
                 else {
-                    this.scene.physics.moveTo(this.shieldObjet, this.scene.player.player.x , this.scene.player.player.y )
+                    this.scene.physics.moveTo(this.shieldObjet, this.scene.player.player.x, this.scene.player.player.y )
+
                 }
 
                 this.shieldObjet.setVelocityX(this.shieldObjet.body.velocity.x * 8)
@@ -119,13 +65,23 @@ class Player {
                     this.shieldObjet.destroy()
                     console.log('shieldObjet')
                 })
-
-                this.scene.physics.add.overlap(this.shieldObjet, this.scene.ai.balle, function () {
-                    me.scene.ai.toucheshield = true;
-                    console.log('hit')
-                    me.scene.physics.moveTo(me.scene.ai.balle, me.scene.ai.sprite.x, me.scene.ai.sprite.y + me.rand, 600);
-                    me.scene.swordHit.play();
+                /*
+                Bernard.tousLesBernards.forEach(bernard,()=>{
+                    this.scene.physics.add.overlap(this.shieldObjet, this.scene.bernard.balle, function () {
+                        this.toucheshield = true;
+                        if (this.toucheshield === true){
+                            me.scene.bernard.timing = me.scene.bernard.timing + 2000;
+                            console.log('timingBoost')
+                            me.toucheshield = false;
+                        }
+                        console.log('hit')
+                        me.scene.physics.moveTo(me.scene.bernard.balle, me.scene.bernard.x, me.scene.bernard.y + me.rand, 600);
+                        me.scene.swordHit.play();
+                    })
                 })
+
+                 */
+
 
 
 
