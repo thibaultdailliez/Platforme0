@@ -36,6 +36,18 @@ class Bernard {
                     console.log(this.timing)
                     console.log('balleOUT')
                 })
+                this.scene.physics.add.overlap(this.scene.shield, this.balle, function () {
+                    this.toucheshield = true;
+                    if (this.toucheshield === true){
+                        this.timing = this.timing + 2000;
+                        console.log('timingBoost')
+                        console.log('hit')
+                        this.toucheshield = false;
+                    }
+
+
+
+                })
 
                 this.scene.physics.add.overlap(this.balle, this.scene.player.player, (balle, player) => {
                     this.balle.destroy(true);

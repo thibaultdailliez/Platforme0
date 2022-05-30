@@ -2,8 +2,6 @@ class Player {
     constructor(scene){
         let me = this
         this.scene= scene
-        this.toucheshield = false;
-        this.rand =  Math.random() * (100 - (-100)) + (-100);
         this.shieldOn = false
         this.player = this.scene.physics.add.sprite(100, 600, 'idle');
         this.player.scale=0.6
@@ -13,6 +11,8 @@ class Player {
         this.player.setCollideWorldBounds(false);
         this.player.body.setAllowGravity(true);
         //this.physics.add.collider(this.player, platforms);.0
+
+
 
         //ANIMATION
 
@@ -42,52 +42,9 @@ class Player {
         });
 
     }
-    shield(){
-        let me = this
-            if (this.shieldOn === false) {
-                this.shieldOn = true
-                this.shieldObjet = this.scene.physics.add.sprite(this.player.x, this.player.y, 'shield').setSize(200, 300).setDisplaySize(200, 300)
-                this.shieldObjet.body.setAllowGravity(false)
-                if (this.scene.gauche === true ){
-                    this.scene.physics.moveTo(this.shieldObjet, this.scene.player.player.x , this.scene.player.player.y)
-                    this.shieldObjet.setVelocityX(this.shieldObjet.body.velocity.x = -100)
-                    this.shieldObjet.setVelocityX(this.shieldObjet.body.velocity.y = -100)
-                }
-                else {
-                    this.scene.physics.moveTo(this.shieldObjet, this.scene.player.player.x, this.scene.player.player.y )
-
-                }
-
-                this.shieldObjet.setVelocityX(this.shieldObjet.body.velocity.x * 8)
-                this.shieldObjet.setVelocityY(this.shieldObjet.body.velocity.y * 8)
-                const life = this.scene.time.delayedCall(400, () => {
-                    this.shieldOn = false
-                    this.shieldObjet.destroy()
-                    console.log('shieldObjet')
-                })
-                /*
-                Bernard.tousLesBernards.forEach(bernard,()=>{
-                    this.scene.physics.add.overlap(this.shieldObjet, this.scene.bernard.balle, function () {
-                        this.toucheshield = true;
-                        if (this.toucheshield === true){
-                            me.scene.bernard.timing = me.scene.bernard.timing + 2000;
-                            console.log('timingBoost')
-                            me.toucheshield = false;
-                        }
-                        console.log('hit')
-                        me.scene.physics.moveTo(me.scene.bernard.balle, me.scene.bernard.x, me.scene.bernard.y + me.rand, 600);
-                        me.scene.swordHit.play();
-                    })
-                })
-
-                 */
 
 
 
-
-
-            }
-    }
     Right(){
         this.player.setVelocityX(650);
         this.player.setFlipX(false);
@@ -130,7 +87,22 @@ class Player {
 
         this.player.setVelocityX(0);
         this.player.setVelocityY(0);
-        this.shield();
+
+        if (this.scene.gauche === true ){
+            this.scene.shield.setFlipX(true);
+            this.scene.shield.setVisible(true);
+            this.scene.shield.body.setEnable(true);
+            this.scene.shield.x = this.player.x - 200   ;
+            this.scene.shield.y = this.player.y + 100;
+        }
+
+        else {
+            this.scene.shield.setFlipX(false);
+            this.scene.shield.setVisible(true);
+            this.scene.shield.body.setEnable(true);
+            this.scene.shield.x = this.player.x + 100 ;
+            this.scene.shield.y = this.player.y - 100 ;
+        }
 
     }
 

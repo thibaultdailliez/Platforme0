@@ -13,7 +13,24 @@ class Ai {
         ///this.scene.physics.add.collider(this.ennemys,this.scene.sol);
         this.projectil=false;
         this.aiDeath = false;
+        this.scene.physics.add.overlap(this.scene.shield, this.scene.bernard.balle, function () {
 
+        })
+        if (this.scene.gauche == true ){
+            this.scene.shield.setFlipX(true);
+            this.scene.shield.setVisible(true);
+            this.scene.shield2.body.setEnable(true);
+            this.scene.shield.x = this.player.x - 200   ;
+            this.scene.shield.y = this.player.y + 100;
+        }
+
+        else {
+            this.scene.shield.setFlipX(false);
+            this.scene.shield.setVisible(true);
+            this.scene.shield2.body.setEnable(true);
+            this.scene.shield.x = this.player.x + 100 ;
+            this.scene.shield.y = this.player.y - 100 ;
+        }
     }
 
     update(){
