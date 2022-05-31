@@ -37,6 +37,13 @@ class Scene extends Phaser.Scene {
         this.load.image('feu', 'assets/images/feu.png');
         this.load.image('feu2', 'assets/images/feu2.png');
 
+        //touche
+        this.load.image('direction', 'assets/images/direction.png');
+        this.load.image('attaque', 'assets/images/attaque.png');
+        this.load.image('saut', 'assets/images/saut.png');
+        this.load.spritesheet('fleche', 'assets/images/fleche.png', { frameWidth: 41, frameHeight: 23 });
+        this.load.spritesheet('ppp', 'assets/images/epee.png', { frameWidth: 65, frameHeight: 61 });
+
 
     }
 
@@ -52,7 +59,75 @@ class Scene extends Phaser.Scene {
         this.sword = this.sound.add('song_sword');
         this.swordHit = this.sound.add('Hit');
         this.roboHit = this.sound.add('HitRobo');
+        //animation touche
+        this.anims.create({
+            key: 'flecheee',
+            frames: this.anims.generateFrameNumbers('fleche', { start: 0, end: 4 }),//CE SONT LES IMAGES 0/1/2/3 QUI SONT JOUEES
+            frameRate: 6,//NOMBRE D'IMAGES JOUEES
+            repeat: -1//REPETITION INFINIE
+        });
 
+        this.anims.create({
+            key: 'pppp',
+            frames: this.anims.generateFrameNumbers('ppp', { start: 0, end: 3 }),//CE SONT LES IMAGES 0/1/2/3 QUI SONT JOUEES
+            frameRate: 10,//NOMBRE D'IMAGES JOUEES
+            repeat: -1//REPETITION INFINIE
+        });
+        // particul
+        this.feuParticles = this.add.particles('feu');
+        this.feuParticles.createEmitter({
+            speed: 100,
+            lifespan: 1500,
+            quantity: 100,
+            //gravityY: 500,
+            scale: {start: 0.5, end: 1},
+            alpha: { start: 1, end: 0 },
+            angle: { min: -100, max: -80 },
+            // blendMode: 'ADD',
+            on: false
+        });
+
+        this.feuFX = {
+
+            frequency:100,
+            lifespan: 2000,
+            quantity:10,
+            x:{min:-20,max:20},
+            y:{min:-10,max:0},
+            rotate: {min:-10,max:10},
+            speedX: { min: -20, max: 20 },
+            speedY: { min: -100, max: -10 },
+            scale: {start: 0, end: 1},
+            alpha: { start: 1, end: 0 },
+            // blendMode: Phaser.BlendModes.ADD,
+        };
+        this.feuParticles = this.add.particles('feu2');
+        this.feuParticles.createEmitter({
+            speed: 100,
+            lifespan: 1500,
+            quantity: 100,
+            //gravityY: 500,
+            scale: {start: 0.5, end: 1},
+            alpha: { start: 1, end: 0 },
+            angle: { min: -100, max: -80 },
+            blendMode: 'ADD',
+            on: false
+        });
+
+        this.feuFX2 = {
+
+            frequency:100,
+            lifespan: 2000,
+            quantity:10,
+            x:{min:-20,max:10},
+            y:{min:-10,max:0},
+            rotate: {min:-10,max:10},
+            speedX: { min: -20, max: 20 },
+            speedY: { min: -100, max: -10 },
+            scale: {start: 0, end: 1},
+            alpha: { start: 1, end: 0 },
+            blendMode: Phaser.BlendModes.ADD,
+        };
 
 
 
@@ -74,6 +149,32 @@ class Scene extends Phaser.Scene {
         this.Herbe = map.createLayer('herbe', zazaz,0,140);
         this.Respawn = map.createLayer('respawn', asset,0,160);
         this.CP2 = map.createLayer('P2sol', asset,0,140);
+        //touche
+        this.directions = this.physics.add.sprite(200, 600,'direction').setOrigin(0, 0);
+        this.directions.body.setAllowGravity(false);
+        this.attaques = this.physics.add.sprite(1200, 540,'attaque').setOrigin(0, 0);
+        this.attaques.body.setAllowGravity(false);
+        this.sauts = this.physics.add.sprite(2400, 540,'saut').setOrigin(0, 0);
+        this.sauts.body.setAllowGravity(false);
+        this.fleche = this.physics.add.sprite(1385, 565,'fleche').setOrigin(0, 0);
+        this.fleche.scale = 0.8;
+        this.fleche.body.setAllowGravity(false);
+        this.fleche.play('flecheee')
+        this.flecheV = this.physics.add.sprite(1250, 585,'fleche').setOrigin(0, 0);
+        this.flecheV.scale = 0.8;
+        this.flecheV.angle = -90
+        this.flecheV.body.setAllowGravity(false);
+        this.flecheV.play('flecheee')
+        this.ppp = this.physics.add.sprite(1375, 605,'ppp').setOrigin(0, 0);
+        this.ppp.scale = 0.8;
+        this.ppp.body.setAllowGravity(false);
+        this.ppp.play('pppp')
+        this.ppp2 = this.physics.add.sprite(1240, 605,'ppp').setOrigin(0, 0);
+        this.ppp2.scale = 0.8;
+        this.ppp2.body.setAllowGravity(false);
+        this.ppp2.play('pppp')
+        //fin Touche
+
 
         this.player = new Player(this);
         this.CPporte = map.createLayer('Pporte', asset,0,100);
@@ -139,66 +240,14 @@ class Scene extends Phaser.Scene {
 
 
 
-        // particul
-        this.feuParticles = this.add.particles('feu');
-        this.feuParticles.createEmitter({
-            speed: 100,
-            lifespan: 1500,
-            quantity: 100,
-            //gravityY: 500,
-            scale: {start: 0.5, end: 1},
-            alpha: { start: 1, end: 0 },
-            angle: { min: -100, max: -80 },
-           // blendMode: 'ADD',
-            on: false
-        });
-
-        this.feuFX = {
-
-            frequency:100,
-            lifespan: 2000,
-            quantity:10,
-            x:{min:-20,max:20},
-            y:{min:-10,max:0},
-            rotate: {min:-10,max:10},
-            speedX: { min: -20, max: 20 },
-            speedY: { min: -100, max: -10 },
-            scale: {start: 0, end: 1},
-            alpha: { start: 1, end: 0 },
-           // blendMode: Phaser.BlendModes.ADD,
-        };
-        this.feuParticles = this.add.particles('feu2');
-        this.feuParticles.createEmitter({
-            speed: 100,
-            lifespan: 1500,
-            quantity: 100,
-            //gravityY: 500,
-            scale: {start: 0.5, end: 1},
-            alpha: { start: 1, end: 0 },
-            angle: { min: -100, max: -80 },
-            blendMode: 'ADD',
-            on: false
-        });
-
-        this.feuFX2 = {
-
-            frequency:100,
-            lifespan: 2000,
-            quantity:10,
-            x:{min:-20,max:10},
-            y:{min:-10,max:0},
-            rotate: {min:-10,max:10},
-            speedX: { min: -20, max: 20 },
-            speedY: { min: -100, max: -10 },
-            scale: {start: 0, end: 1},
-            alpha: { start: 1, end: 0 },
-            blendMode: Phaser.BlendModes.ADD,
-        };
 
 
 
 
-        // Projectille
+
+        //Touche
+
+
 
 
 
@@ -280,7 +329,7 @@ class Scene extends Phaser.Scene {
 
         this.initKeyboard();
 
-        this.cameras.main.startFollow(this.player.player, true, 0.05, 0.05, -350,100);
+        this.cameras.main.startFollow(this.player.player, true, 1, 0.020, -350,100);
 
 
 
