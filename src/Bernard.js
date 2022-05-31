@@ -14,14 +14,18 @@ class Bernard {
         this.aiDeath = false;
         Bernard.tousLesBernards.push(this);
 
+
     }
 
     update(){
         if(Phaser.Math.Distance.Between(this.scene.player.player.x,this.scene.player.player.y,this.bernard.x,this.bernard.y)<this.range){
             this.fire()
         }
+        this.rand = Phaser.Math.Between(-200,200);
+        console.log(this.rand)
     }
     fire(){
+        let me = this;
         if(this.aiDeath === false) {
             if (this.projectil === false) {
                 this.projectil = true
@@ -40,6 +44,8 @@ class Bernard {
                     this.toucheshield = true;
                     if (this.toucheshield === true){
                         this.timing = this.timing + 2000;
+                        me.scene.physics.moveTo(me.balle,me.bernard.x,me.bernard.y + me.rand,500)
+
                         console.log('timingBoost')
                         console.log('hit')
                         this.toucheshield = false;
