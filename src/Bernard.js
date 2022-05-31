@@ -23,6 +23,9 @@ class Bernard {
         }
         this.rand = Phaser.Math.Between(-200,200);
         console.log(this.rand)
+        if (this.toucheshield === true) {
+            this.timing = this.timing + 2000;
+        }
     }
     fire(){
         let me = this;
@@ -42,14 +45,12 @@ class Bernard {
                 })
                 this.scene.physics.add.overlap(this.scene.shield, this.balle, function () {
                     this.toucheshield = true;
-                    if (this.toucheshield === true){
-                        this.timing = this.timing + 2000;
                         me.scene.physics.moveTo(me.balle,me.bernard.x,me.bernard.y + me.rand,500)
 
                         console.log('timingBoost')
                         console.log('hit')
                         this.toucheshield = false;
-                    }
+
 
 
 
