@@ -8,9 +8,12 @@ let gameConfig = {
         default: 'arcade',
         arcade: {
             gravity: {y: 1600},
-            debug: true,
-        },
+            fps:60,
+        }
     },
-    scene: new Scene()
+    scene: [Scene,SceneAth]
+
 };
 let game = new Phaser.Game(gameConfig);
+let mort = 0
+let score = 0
