@@ -4,7 +4,7 @@ class Player {
         this.scene= scene
         this.shieldOn = false
         this.time = 250;
-        this.player = this.scene.physics.add.sprite(100, 600, 'idle');
+        this.player = this.scene.physics.add.sprite(25000, 500, 'idle');
         this.player.scale=0.6
         //Taille de la hitbox du Player
         this.player.setBodySize(this.player.width-600, this.player.height-180).setOffset(300, 180);
@@ -32,13 +32,13 @@ class Player {
         this.scene.anims.create({
             key: 'couprl',
             frames: this.scene.anims.generateFrameNumbers('couprl', { start: 0, end: 7 }),//CE SONT LES IMAGES 0/1/2/3 QUI SONT JOUEES
-            frameRate: 22,//NOMBRE D'IMAGES JOUEES
+            frameRate: 23,//NOMBRE D'IMAGES JOUEES
             repeat: 0//REPETITION INFINIE
         });
         this.scene.anims.create({
             key: 'couph',
             frames: this.scene.anims.generateFrameNumbers('couph', { start: 0, end: 7 }),//CE SONT LES IMAGES 0/1/2/3 QUI SONT JOUEES
-            frameRate: 22,//NOMBRE D'IMAGES JOUEES
+            frameRate: 23,//NOMBRE D'IMAGES JOUEES
             repeat: 0//REPETITION INFINIE
         });
 

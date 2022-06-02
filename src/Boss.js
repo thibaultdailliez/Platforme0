@@ -3,46 +3,51 @@ class Boss{
 
     constructor(scene,x,y){
         this.scene = scene
-        this.bossrange = 1000;
-        this.bossrange2 = 1000;
+        this.bossrange = 800;
+        this.bossrange2 = 800;
         this.bosstouche = false;
         this.bosstiming = 1800;
         this.bosstouche2 = false;
         this.bosstiming2 = 3500;
         this.bossJpp = false;
-        this.boss = this.scene.physics.add.sprite(x,y,'boss');
-        this.boss.setDisplaySize(90,80);
+        this.boss = this.scene.physics.add.sprite(25000,30,'roboton');
+        this.boss.setFlipX(true);
         this.scene.physics.add.collider(this.boss,this.scene.Platformai);
         this.scene.physics.add.collider(this.boss,this.scene.sol);
         this.bossprojectil=false;
         this.bossprojectil2=false;
         this.bossDeath = false;
         this.bosspoints = 500;
-        Boss.LeBoss.push(this);
+        this.scene.anims.create({
+            key: 'Robot',
+            frames: this.scene.anims.generateFrameNumbers('roboton', { start: 0, end: 4 }),//CE SONT LES IMAGES 0/1/2/3 QUI SONT JOUEES
+            frameRate: 6,//NOMBRE D'IMAGES JOUEES
+            repeat: 0//REPETITION INFINIE
+        });
 
 
     }
 
     update(){
 
+        /*if(Phaser.Math.Distance.Between(this.scene.player.player.x,this.scene.player.player.y,this.boss.x,this.boss.y)<1000){
+            console.log('ro')
+            this.AnimBoss()
+        }*/
         if(Phaser.Math.Distance.Between(this.scene.player.player.x,this.scene.player.player.y,this.boss.x,this.boss.y)<this.bossrange){
-            //this.bossfire()
+            this.bossfire()
         }
         if(Phaser.Math.Distance.Between(this.scene.player.player.x,this.scene.player.player.y,this.boss.x,this.boss.y)<this.bossrange2){
-            //this.bossfire2()
-            /*if (this.bosstouche2 === false){
+            this.bossfire2()
+            if (this.bosstouche2 === false){
                 this.scene.physics.moveTo(this.bossballe2, this.scene.player.player.x, this.scene.player.player.y);
                 this.bossballe2.setVelocityX(this.bossballe2.body.velocity.x * 8);
                 this.bossballe2.setVelocityY(this.bossballe2.body.velocity.y * 8);
                 console.log(this.bosstiming2);
-
-            }*/
-
-
+            }
         }
-        this.bossrand = Phaser.Math.Between(-50,50);
-        //console.log('zezeezzeezzeezzezezezezezezezezezezezezezeze')
 
+        this.bossrand = Phaser.Math.Between(-50,50);
 
         if (this.bosstouche === true) {
             this.bosstiming =  2500;
@@ -69,6 +74,9 @@ class Boss{
 
 
 
+    }
+    AnimBoss(){
+        this.boss.play('Robot', true);
     }
     bossfire(){
         let me = this;
@@ -103,12 +111,12 @@ class Boss{
 
                 this.scene.physics.add.overlap(this.bossballe, this.scene.player.player, (bossballe, player) => {
                     this.bossballe.destroy(true);
-                    this.mort = this.mort + 1;
-                    this.score = this.score -10;
+                    mort = mort + 1;
+                    score = score -10;
                     this.scene.player.player.x = this.scene.savesX;
                     this.scene.player.player.y = this.scene.savesY;
-                    console.log(this.mort,'mort');
-                    console.log(this.score,'score');
+                    console.log(mort,'mort');
+                    console.log(score,'score');
 
                 }, null, this)
 
@@ -120,9 +128,9 @@ class Boss{
                     this.boss.setVisible(false);
                     this.boss.disableBody();
                     this.scene.roboHit.play();
-                    this.scene.score = this.scene.score + this.bosspoints;
+                    score = score + this.bosspoints;
                     this.bossDeath = true;
-                    console.log(this.scene.score,'score');
+                    console.log(score,'score');
 
                 })
             }
@@ -159,12 +167,12 @@ class Boss{
 
                 this.scene.physics.add.overlap(this.bossballe2, this.scene.player.player, (bossballe2, player) => {
                     this.bossJpp = true;
-                    this.mort = this.mort + 1;
-                    this.score = this.score -10;
+                    mort = mort + 1;
+                    score = score -10;
                     this.scene.player.player.x = this.scene.savesX;
                     this.scene.player.player.y = this.scene.savesY;
-                    console.log(this.mort,'mort');
-                    console.log(this.score,'score');
+                    console.log(mort,'mort');
+                    console.log(score,'score');
                 }, null, this)
 
 
@@ -177,7 +185,7 @@ class Boss{
                     this.scene.roboHit.play();
                     this.scene.score = this.scene.score + this.bosspoints;
                     this.bossDeath = true;
-                    console.log(this.scene.score,'score');
+                    console.log(score,'score');
 
                 })
             }
@@ -189,8 +197,3 @@ class Boss{
 
 }
 
-/**
- *
- * @type {Bernard[]}
- */
-Boss.LeBoss=[];

@@ -34,6 +34,7 @@ class Scene extends Phaser.Scene {
         this.load.spritesheet('run', 'assets/images/runv2.png', { frameWidth: 691.5, frameHeight: 505 });
         this.load.spritesheet('couprl', 'assets/images/couprlv2.png', { frameWidth: 691.5, frameHeight: 505 });
         this.load.spritesheet('couph', 'assets/images/couphv2.png', { frameWidth: 691.5, frameHeight: 505 });
+        this.load.spritesheet('roboton', 'assets/images/AnimROBOon.png', { frameWidth: 252 , frameHeight: 462 });
 
         //particul
         this.load.image('feu', 'assets/images/feu.png');
@@ -375,11 +376,7 @@ class Scene extends Phaser.Scene {
 
         });
 
-        map.getObjectLayer('boss').objects.forEach((boss) => {
-            let monBoss=new Boss(this,boss.x+(boss.width*0.5),boss.y);
 
-
-        });
 
 
 
@@ -524,9 +521,7 @@ class Scene extends Phaser.Scene {
             bernard.update();
         });
 
-        Boss.LeBoss.forEach(boss=>{
-            boss.update();
-        });
+
 
 
 
