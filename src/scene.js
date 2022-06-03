@@ -357,7 +357,7 @@ class Scene extends Phaser.Scene {
             this.enemySprite = this.physics.add.sprite(enemy.x+(enemy.width*0.5), enemy.y+(enemy.height*0.5)).setSize(enemy.width, enemy.height);
             this.enemy.add(this.enemySprite)
         });
-        
+
 
         map.getObjectLayer('Sol').objects.forEach((sol) => {
             const solSprite = this.physics.add.sprite(sol.x+(sol.width*0.5),sol.y + (sol.height*0.5) + 100).setSize(sol.width,sol.height);
@@ -397,7 +397,11 @@ class Scene extends Phaser.Scene {
         })
         this.initKeyboard();
 
-        this.cameras.main.startFollow(this.player.player, true, 1, 0.10, -350,100);
+        this.pointCamera = this.physics.add.sprite(0, 0);
+        this.cameras.main.startFollow(this.pointCamera, true,1,1,0, 200);
+        this.pointCamera.body.setAllowGravity(false);
+        this.pointCamera.setImmovable(true);
+        this.cameras.main.setRoundPixels(true);
 
 
 
@@ -531,6 +535,33 @@ class Scene extends Phaser.Scene {
         Bernard.tousLesBernards.forEach(bernard=>{
             bernard.update();
         });
+        this.pointCamera.body.x = this.player.player.body.x + 350;
+        this.pointCamera.body.y = this.player.player.body.y ;
+        let offset=100;
+        switch(true)
+        {
+            case this.player.player.body.velocity.y<0:
+                offset=50;
+                break;
+            case this.player.player.body.velocity.y>0:
+                offset=-50;
+                break;
+
+            default:
+                offset=100
+                break;
+
+        }
+
+
+        function lerp (start, end, amt=0.1){
+            return (1-amt)*start+amt*end
+        }
+
+
+
+
+        this.cameras.main.followOffset.y=lerp(this.cameras.main.followOffset.y,offset,  0.01)
 
 
 
