@@ -6,7 +6,7 @@ class Scene extends Phaser.Scene {
         this.load.image('key', 'assets/images/key.png');
         this.load.image('key', 'assets/images/key.png');
         this.load.image('ladder', 'assets/images/ladder.png');
-        this.load.image('ennemy', 'assets/images/Ennemy.png');
+        this.load.image('Enemy', 'assets/images/Ennemy.png');
         this.load.image('turret', 'assets/images/turret.png');
         this.load.image('Boss', 'assets/images/boss.png');
         // At last image must be loaded with its JSON
@@ -352,11 +352,12 @@ class Scene extends Phaser.Scene {
             immovable: true
         });
 
-        map.getObjectLayer('Enemy').objects.forEach((enemy) => {
-            const enemySprite = this.enemy.create(enemy.x, enemy.y - enemy.height + 100).setOrigin(0);
-            enemySprite.body.setSize(enemy.width, enemy.height).setOffset(0, 0);
-        });
 
+        map.getObjectLayer('Enemy').objects.forEach((enemy) => {
+            this.enemySprite = this.physics.add.sprite(enemy.x+(enemy.width*0.5), enemy.y+(enemy.height*0.5)).setSize(enemy.width, enemy.height);
+            this.enemy.add(this.enemySprite)
+        });
+        
 
         map.getObjectLayer('Sol').objects.forEach((sol) => {
             const solSprite = this.physics.add.sprite(sol.x+(sol.width*0.5),sol.y + (sol.height*0.5) + 100).setSize(sol.width,sol.height);
