@@ -13,6 +13,73 @@ class Bernard {
         this.projectil=false;
         this.aiDeath = false;
         this.points = 500;
+        this.dieParticles = this.scene.add.particles('robotMort');
+        this.dieParticles.createEmitter({
+            speed: 300,
+            lifespan: 600,
+            quantity: 50,
+            rotate: {min:-90,max:90},
+            scale: {start: 2, end: 0},
+            alpha:{start: 1, end: 0},
+            //angle: { min: -180, max: 0 },
+            blendMode: 'ADD',
+            on: false
+        });
+        this.hitParticles = this.scene.add.particles('shieldhit');
+        this.hitParticles.createEmitter({
+            speed: 300,
+            lifespan: 600,
+            quantity: 50,
+            rotate: {min:-90,max:90},
+            scale: {start: 2, end: 0},
+            alpha:{start: 1, end: 0},
+            angle: { min: -90, max: 70 },
+            blendMode: 'ADD',
+            on: false
+        });
+
+        this.balleParticles = this.scene.add.particles('balleFX');
+        this.balleParticles.createEmitter({
+            speed: 300,
+            lifespan: 600,
+            quantity: 50,
+            rotate: {min:-90,max:90},
+            scale: {start: 2, end: 0},
+            alpha:{start: 1, end: 0},
+            angle: { min: -90, max: 90 },
+            blendMode: 'ADD',
+            on: false
+        });
+
+
+        this.tireParticles = this.scene.add.particles('tirerobot');
+        this.tireParticles.createEmitter({
+            speed: 300,
+            lifespan: 600,
+            quantity: 50,
+            rotate: {min:-90,max:90},
+            scale: {start: 2, end: 0},
+            alpha:{start: 1, end: 0},
+            angle: { min: 220, max: 110 },
+            blendMode: 'ADD',
+            on: false
+        });
+        this.smokeFX = {
+            frequency:250,
+            lifespan: 1500,
+            quantity:2,
+            x:{min:-32,max:32},
+            y:{min:-10,max:10},
+            tint:0x808080,
+            rotate: {min:-10,max:10},
+            speedX: { min: -10, max: 10 },
+            speedY: { min: -10, max: -20 },
+            scale: {start: 0, end: 1},
+            alpha: { start: 1, end: 0 },
+            //blendMode: Phaser.BlendModes.ADD,
+        };
+
+
         Bernard.tousLesBernards.push(this);
 
 
@@ -41,6 +108,20 @@ class Bernard {
 
 
     }
+    particles(){
+        this.parts = this.scene.add.particles('balleFX');
+
+        this.particlesEmit= this.parts.createEmitter({
+            speed: 50,
+            scale: { start: 0.2, end: 0 },
+            lifespan: { min: 300, max: 400 },
+            blendMode: 'ADD'
+
+        })
+
+        this.parts.setDepth(1);
+        this.particlesEmit.startFollow(this)
+    }
 
 
     fire(){
@@ -48,12 +129,12 @@ class Bernard {
         if(this.aiDeath === false) {
             if (this.projectil === false) {
                 this.projectil = true
-                this.balle = this.scene.physics.add.sprite(this.bernard.x, this.bernard.y, 'Arme1').setSize(5, 5).setDisplaySize(5, 5)
-
+                this.balle = this.scene.physics.add.sprite(this.bernard.x, this.bernard.y, 'Arme1').setSize(10, 10).setDisplaySize(10, 10)
                 this.balle.body.setAllowGravity(false)
                 this.scene.physics.moveTo(this.balle, this.scene.player.player.x, this.scene.player.player.y)
                 this.balle.setVelocityX(this.balle.body.velocity.x * 10)
                 this.balle.setVelocityY(this.balle.body.velocity.y * 10)
+                this.tireParticles.emitParticleAt(this.balle.x-40,this.balle.y);
                 const life = this.scene.time.delayedCall(this.timing, () => {
                     this.projectil = false;
                     this.points = this.points - 10;
@@ -67,6 +148,7 @@ class Bernard {
                     me.touche = true;
                     me.scene.physics.moveTo(me.balle,me.bernard.x,me.bernard.y + me.rand,900)
                     console.log('hit')
+                    me.hitParticles.emitParticleAt(me.balle.x,me.balle.y);
 
 
 
@@ -94,6 +176,10 @@ class Bernard {
                     score = score + this.points;
                     this.aiDeath = true;
                     console.log(score,'score');
+                    this.emitSmoke = this.scene.add.particles('robotMort');
+                    this.emitSmoke.createEmitter(this.smokeFX);
+                    this.emitSmoke.x = this.balle.x+40;
+                    this.emitSmoke.y = this.balle.y;
 
                 })
             }

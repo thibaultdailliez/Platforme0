@@ -1,7 +1,7 @@
 class Boss{
 
 
-    constructor(scene,x,y){
+    constructor(scene){
         this.scene = scene
         this.bossrange = 800;
         this.bossrange2 = 800;
@@ -10,10 +10,10 @@ class Boss{
         this.bosstouche2 = false;
         this.bosstiming2 = 3500;
         this.bossJpp = false;
-        this.boss = this.scene.physics.add.sprite(25000,30,'roboton');
-        this.boss.setFlipX(true);
+        this.boss = this.scene.physics.add.sprite(25000,0,'roboton');
         this.scene.physics.add.collider(this.boss,this.scene.Platformai);
         this.scene.physics.add.collider(this.boss,this.scene.sol);
+        this.boss.setFlipX(true);
         this.bossprojectil=false;
         this.bossprojectil2=false;
         this.bossDeath = false;
@@ -24,7 +24,6 @@ class Boss{
             frameRate: 6,//NOMBRE D'IMAGES JOUEES
             repeat: 0//REPETITION INFINIE
         });
-
 
     }
 

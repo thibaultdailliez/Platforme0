@@ -4,7 +4,7 @@ class Player {
         this.scene= scene
         this.shieldOn = false
         this.time = 250;
-        this.player = this.scene.physics.add.sprite(25000, 500, 'idle');
+        this.player = this.scene.physics.add.sprite(350, 500, 'idle');
         this.player.scale=0.6
         //Taille de la hitbox du Player
         this.player.setBodySize(this.player.width-600, this.player.height-180).setOffset(300, 180);
@@ -12,6 +12,7 @@ class Player {
         this.player.setCollideWorldBounds(false);
         this.player.body.setAllowGravity(true);
         //this.physics.add.collider(this.player, platforms);.0
+
 
 
 

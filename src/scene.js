@@ -41,6 +41,10 @@ class Scene extends Phaser.Scene {
         this.load.image('feu2', 'assets/images/feu2.png');
         this.load.image('feu3', 'assets/images/feu3.png');
         this.load.image('feu4', 'assets/images/feu4.png');
+        this.load.image('robotMort', 'assets/images/robothit.png');
+        this.load.image('shieldhit', 'assets/images/shieldhit.png');
+        this.load.image('balleFX', 'assets/images/balleFX.png');
+        this.load.image('tirerobot', 'assets/images/tirerobot.png');
 
         //touche
         this.load.image('direction', 'assets/images/direction.png');
@@ -212,6 +216,7 @@ class Scene extends Phaser.Scene {
         const backfond = map.addTilesetImage('fond', 'backFond');
 
         this.CP5fond = map.createLayer('P5fond', backfond,0,0);
+        this.CP4 = map.createLayer('P4', zazaz,0,140);
         this.CP3 = map.createLayer('P3', zazaz,0,140);
         this.Herbe = map.createLayer('herbe', zazaz,0,140);
         this.Respawn = map.createLayer('respawn', asset,0,160);
@@ -245,10 +250,12 @@ class Scene extends Phaser.Scene {
 
 
         this.player = new Player(this);
+        this.boss = new Boss(this);
         this.CPporte = map.createLayer('Pporte', asset,0,100);
         this.CP1 = map.createLayer('P1', asset,0,100);
 //PARALLAXE
-        //this.CP4.scrollFactorX=0.1;
+        this.CP4.setAlpha(0.5);
+        this.CP4.scrollFactorX=0;
         this.CP3.scrollFactorX=0.4;
         this.CP2.scrollFactorX=1;
         this.CP1.scrollFactorX=1;
@@ -271,21 +278,7 @@ class Scene extends Phaser.Scene {
 
             const saveSprite = this.saves.create(save.x, save.y  - save.height + 120,'save').setOrigin(0);
         });
-        /*map.getObjectLayer('feu').objects.forEach((Feu) => {
 
-            const FeuSprite = this.physics.add.sprite(Feu.x, Feu.y,'save').setOrigin(0);
-            this.emitFeu3 = this.add.particles('feu3'); //On charge les particules à appliquer au layer
-            this.emitFeu3.createEmitter(this.feuFX); //On crée l'émetteur
-            this.emitFeu3.x = Feu.x + 35;
-            this.emitFeu3.y = Feu.y  - Feu.height + 160;
-            this.emitFeu3.scale = 0.5;
-            this.emitFeu4 = this.add.particles('feu4'); //On charge les particules à appliquer au layer
-            this.emitFeu4.createEmitter(this.feuFX2); //On crée l'émetteur
-            this.emitFeu4.x = Feu.x + 35;
-            this.emitFeu4.y = Feu.y  - Feu.height + 160;
-            this.emitFeu4.scale = 0.5;
-
-        });*/
         // Création du bouclier
 
         this.shield = this.physics.add.sprite(200, 100,'shield').setOrigin(0, 0);
@@ -369,6 +362,14 @@ class Scene extends Phaser.Scene {
             const solSprite = this.physics.add.sprite(sol.x+(sol.width*0.5),sol.y + (sol.height*0.5) + 100).setSize(sol.width,sol.height);
             this.sol.add(solSprite);
         });
+        this.victoire = this.physics.add.group({
+            allowGravity: false,
+            immovable: true
+        });
+        map.getObjectLayer('Victoire').objects.forEach((victoire) => {
+            const victoireSprite = this.physics.add.sprite(victoire.x+(victoire.width*0.5),victoire.y + (victoire.height*0.5) + 100).setSize(victoire.width,victoire.height);
+            this.victoire.add(victoireSprite);
+        });
         map.getObjectLayer('bernards').objects.forEach((bernard) => {
             let monBernard=new Bernard(this,bernard.x+(bernard.width*0.5),bernard.y);
             //const bernardSprite = this.bernards.create(bernard.x, bernard.y).setOrigin(0);
@@ -384,6 +385,15 @@ class Scene extends Phaser.Scene {
         this.physics.add.collider(this.player.player, this.sol);
         this.physics.add.collider(this.player.player, this.enemy, this.playerHit, null, this);
         this.physics.add.overlap(this.player.player, this.saves, this.Save, null, this);
+        this.physics.add.overlap(this.player.player, this.victoire, function () {
+            me.scene.launch('SceneFin');
+            console.log('fin')
+
+
+
+
+
+        })
         this.initKeyboard();
 
         this.cameras.main.startFollow(this.player.player, true, 1, 0.10, -350,100);
@@ -400,7 +410,7 @@ class Scene extends Phaser.Scene {
         this.player.player.y = this.savesY;
         this.player.player.play('idel', true);
         mort = mort + 1;
-        this.score = this.score -100;
+        score = score -100;
         console.log(this.mort,'death')
         console.log(this.score,'score')
         let tw = this.tweens.add({
